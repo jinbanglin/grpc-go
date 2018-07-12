@@ -28,13 +28,13 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	durpb "github.com/golang/protobuf/ptypes/duration"
 	wrpb "github.com/golang/protobuf/ptypes/wrappers"
+	"github.com/micro/grpc-go"
+	channelzgrpc "github.com/micro/grpc-go/channelz/grpc_channelz_v1"
+	channelzpb "github.com/micro/grpc-go/channelz/grpc_channelz_v1"
+	"github.com/micro/grpc-go/connectivity"
+	"github.com/micro/grpc-go/credentials"
+	"github.com/micro/grpc-go/internal/channelz"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	channelzgrpc "google.golang.org/grpc/channelz/grpc_channelz_v1"
-	channelzpb "google.golang.org/grpc/channelz/grpc_channelz_v1"
-	"google.golang.org/grpc/connectivity"
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/internal/channelz"
 )
 
 func convertToPtypesDuration(sec int64, usec int64) *durpb.Duration {

@@ -22,13 +22,13 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/micro/grpc-go/balancer"
+	"github.com/micro/grpc-go/codes"
+	"github.com/micro/grpc-go/connectivity"
+	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/resolver"
+	"github.com/micro/grpc-go/status"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/balancer"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/connectivity"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/resolver"
-	"google.golang.org/grpc/status"
 )
 
 type balancerWrapperBuilder struct {

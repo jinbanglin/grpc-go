@@ -21,7 +21,7 @@ package conn
 import (
 	"crypto/cipher"
 
-	"google.golang.org/grpc/credentials/alts/core"
+	"github.com/micro/grpc-go/credentials/alts/core"
 )
 
 const (

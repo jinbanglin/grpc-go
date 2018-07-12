@@ -23,11 +23,11 @@ import (
 	"flag"
 	"time"
 
+	grpc "github.com/micro/grpc-go"
+	"github.com/micro/grpc-go/credentials/alts"
+	"github.com/micro/grpc-go/grpclog"
+	testpb "github.com/micro/grpc-go/interop/grpc_testing"
 	"golang.org/x/net/context"
-	grpc "google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/alts"
-	"google.golang.org/grpc/grpclog"
-	testpb "google.golang.org/grpc/interop/grpc_testing"
 )
 
 const (

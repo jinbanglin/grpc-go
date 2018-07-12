@@ -28,7 +28,7 @@ import (
 	"reflect"
 	"testing"
 
-	"google.golang.org/grpc/credentials/alts/core"
+	"github.com/micro/grpc-go/credentials/alts/core"
 )
 
 var (

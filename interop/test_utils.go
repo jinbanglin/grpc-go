@@ -28,15 +28,15 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
+	"github.com/micro/grpc-go"
+	"github.com/micro/grpc-go/codes"
+	"github.com/micro/grpc-go/grpclog"
+	testpb "github.com/micro/grpc-go/interop/grpc_testing"
+	"github.com/micro/grpc-go/metadata"
+	"github.com/micro/grpc-go/status"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/grpclog"
-	testpb "google.golang.org/grpc/interop/grpc_testing"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 )
 
 var (

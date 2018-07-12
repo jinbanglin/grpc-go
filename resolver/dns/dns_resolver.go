@@ -31,10 +31,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/internal/grpcrand"
+	"github.com/micro/grpc-go/resolver"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/internal/grpcrand"
-	"google.golang.org/grpc/resolver"
 )
 
 func init() {

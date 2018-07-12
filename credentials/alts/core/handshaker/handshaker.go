@@ -26,15 +26,15 @@ import (
 	"net"
 	"sync"
 
+	grpc "github.com/micro/grpc-go"
+	"github.com/micro/grpc-go/codes"
+	"github.com/micro/grpc-go/credentials"
+	"github.com/micro/grpc-go/credentials/alts/core"
+	"github.com/micro/grpc-go/credentials/alts/core/authinfo"
+	"github.com/micro/grpc-go/credentials/alts/core/conn"
+	altsgrpc "github.com/micro/grpc-go/credentials/alts/core/proto/grpc_gcp"
+	altspb "github.com/micro/grpc-go/credentials/alts/core/proto/grpc_gcp"
 	"golang.org/x/net/context"
-	grpc "google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/credentials/alts/core"
-	"google.golang.org/grpc/credentials/alts/core/authinfo"
-	"google.golang.org/grpc/credentials/alts/core/conn"
-	altsgrpc "google.golang.org/grpc/credentials/alts/core/proto/grpc_gcp"
-	altspb "google.golang.org/grpc/credentials/alts/core/proto/grpc_gcp"
 )
 
 const (

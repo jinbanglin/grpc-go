@@ -26,18 +26,18 @@ import (
 	"sync"
 	"time"
 
+	"github.com/micro/grpc-go/balancer"
+	"github.com/micro/grpc-go/codes"
+	"github.com/micro/grpc-go/encoding"
+	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/internal/channelz"
+	"github.com/micro/grpc-go/internal/grpcrand"
+	"github.com/micro/grpc-go/internal/transport"
+	"github.com/micro/grpc-go/metadata"
+	"github.com/micro/grpc-go/stats"
+	"github.com/micro/grpc-go/status"
 	"golang.org/x/net/context"
 	"golang.org/x/net/trace"
-	"google.golang.org/grpc/balancer"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/encoding"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/internal/channelz"
-	"google.golang.org/grpc/internal/grpcrand"
-	"google.golang.org/grpc/internal/transport"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/stats"
-	"google.golang.org/grpc/status"
 )
 
 // StreamHandler defines the handler called by gRPC server to complete the

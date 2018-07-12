@@ -19,11 +19,11 @@
 package base
 
 import (
+	"github.com/micro/grpc-go/balancer"
+	"github.com/micro/grpc-go/connectivity"
+	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/resolver"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/balancer"
-	"google.golang.org/grpc/connectivity"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/resolver"
 )
 
 type baseBuilder struct {

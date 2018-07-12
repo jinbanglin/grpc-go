@@ -23,11 +23,11 @@ import (
 	"testing"
 	"time"
 
+	grpc "github.com/micro/grpc-go"
+	"github.com/micro/grpc-go/credentials/alts/core"
+	altspb "github.com/micro/grpc-go/credentials/alts/core/proto/grpc_gcp"
+	"github.com/micro/grpc-go/credentials/alts/core/testutil"
 	"golang.org/x/net/context"
-	grpc "google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/alts/core"
-	altspb "google.golang.org/grpc/credentials/alts/core/proto/grpc_gcp"
-	"google.golang.org/grpc/credentials/alts/core/testutil"
 )
 
 var (

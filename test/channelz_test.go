@@ -25,18 +25,18 @@ import (
 	"testing"
 	"time"
 
+	"github.com/micro/grpc-go"
+	_ "github.com/micro/grpc-go/balancer/grpclb"
+	"github.com/micro/grpc-go/codes"
+	"github.com/micro/grpc-go/internal/channelz"
+	"github.com/micro/grpc-go/internal/leakcheck"
+	"github.com/micro/grpc-go/keepalive"
+	"github.com/micro/grpc-go/resolver"
+	"github.com/micro/grpc-go/resolver/manual"
+	"github.com/micro/grpc-go/status"
+	testpb "github.com/micro/grpc-go/test/grpc_testing"
 	"golang.org/x/net/context"
 	"golang.org/x/net/http2"
-	"google.golang.org/grpc"
-	_ "google.golang.org/grpc/balancer/grpclb"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/internal/channelz"
-	"google.golang.org/grpc/internal/leakcheck"
-	"google.golang.org/grpc/keepalive"
-	"google.golang.org/grpc/resolver"
-	"google.golang.org/grpc/resolver/manual"
-	"google.golang.org/grpc/status"
-	testpb "google.golang.org/grpc/test/grpc_testing"
 )
 
 func (te *test) startServers(ts testpb.TestServiceServer, num int) {

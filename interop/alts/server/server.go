@@ -23,11 +23,11 @@ import (
 	"flag"
 	"net"
 
-	grpc "google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/alts"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/interop"
-	testpb "google.golang.org/grpc/interop/grpc_testing"
+	grpc "github.com/micro/grpc-go"
+	"github.com/micro/grpc-go/credentials/alts"
+	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/interop"
+	testpb "github.com/micro/grpc-go/interop/grpc_testing"
 )
 
 var (

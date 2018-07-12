@@ -30,13 +30,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/micro/grpc-go"
+	"github.com/micro/grpc-go/codes"
+	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/interop"
+	testpb "github.com/micro/grpc-go/interop/grpc_testing"
+	"github.com/micro/grpc-go/status"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/interop"
-	testpb "google.golang.org/grpc/interop/grpc_testing"
-	"google.golang.org/grpc/status"
 )
 
 var (

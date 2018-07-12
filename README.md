@@ -1,45 +1,21 @@
 # gRPC-Go
 
-[![Build Status](https://travis-ci.org/grpc/grpc-go.svg)](https://travis-ci.org/grpc/grpc-go) [![GoDoc](https://godoc.org/google.golang.org/grpc?status.svg)](https://godoc.org/google.golang.org/grpc) [![GoReportCard](https://goreportcard.com/badge/grpc/grpc-go)](https://goreportcard.com/report/github.com/grpc/grpc-go)
+gRPC-go is a stripped down version of the official [grpc-go](https://github.com/grpc/grpc-go) library.
 
-The Go implementation of [gRPC](https://grpc.io/): A high performance, open source, general RPC framework that puts mobile and HTTP/2 first. For more information see the [gRPC Quick Start: Go](https://grpc.io/docs/quickstart/go.html) guide.
+## Why?
 
-Installation
-------------
+We continually encountered breaking changes, the library didn't feel like it was made to be used by developers. 
+The transport was moved to an internal package which broke support for go-micro so we've forked to alleviate these problems.
 
-To install this package, you need to install Go and setup your Go workspace on your computer. The simplest way to install the library is to run:
+## Usage
 
-```
-$ go get -u google.golang.org/grpc
-```
+See official [readme](https://github.com/grpc/grpc-go) for usage.
 
-Prerequisites
--------------
+## Compatibility
 
-This requires Go 1.6 or later. Go 1.7 will be required soon.
+- gRPC-go continues to be compatible with official grpc applications
+- gRPC-go is not a replacement for [go-grpc](https://github.com/micro/go-grpc)
 
-Constraints
------------
-The grpc package should only depend on standard Go packages and a small number of exceptions. If your contribution introduces new dependencies which are NOT in the [list](http://godoc.org/google.golang.org/grpc?imports), you need a discussion with gRPC-Go authors and consultants.
+## License
 
-Documentation
--------------
-See [API documentation](https://godoc.org/google.golang.org/grpc) for package and API descriptions and find examples in the [examples directory](examples/).
-
-Performance
------------
-See the current benchmarks for some of the languages supported in [this dashboard](https://performance-dot-grpc-testing.appspot.com/explore?dashboard=5652536396611584&widget=490377658&container=1286539696).
-
-Status
-------
-General Availability [Google Cloud Platform Launch Stages](https://cloud.google.com/terms/launch-stages).
-
-FAQ
----
-
-#### Compiling error, undefined: grpc.SupportPackageIsVersion
-
-Please update proto package, gRPC package and rebuild the proto files:
- - `go get -u github.com/golang/protobuf/{proto,protoc-gen-go}`
- - `go get -u google.golang.org/grpc`
- - `protoc --go_out=plugins=grpc:. *.proto`
+- gRPC-go remains under the same license as the official library

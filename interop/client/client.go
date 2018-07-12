@@ -23,16 +23,16 @@ import (
 	"net"
 	"strconv"
 
-	"google.golang.org/grpc"
-	_ "google.golang.org/grpc/balancer/grpclb"
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/credentials/alts"
-	"google.golang.org/grpc/credentials/oauth"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/interop"
-	testpb "google.golang.org/grpc/interop/grpc_testing"
-	"google.golang.org/grpc/resolver"
-	"google.golang.org/grpc/testdata"
+	"github.com/micro/grpc-go"
+	_ "github.com/micro/grpc-go/balancer/grpclb"
+	"github.com/micro/grpc-go/credentials"
+	"github.com/micro/grpc-go/credentials/alts"
+	"github.com/micro/grpc-go/credentials/oauth"
+	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/interop"
+	testpb "github.com/micro/grpc-go/interop/grpc_testing"
+	"github.com/micro/grpc-go/resolver"
+	"github.com/micro/grpc-go/testdata"
 )
 
 var (

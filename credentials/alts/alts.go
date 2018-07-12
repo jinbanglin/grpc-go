@@ -30,13 +30,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/micro/grpc-go/credentials"
+	"github.com/micro/grpc-go/credentials/alts/core"
+	"github.com/micro/grpc-go/credentials/alts/core/handshaker"
+	"github.com/micro/grpc-go/credentials/alts/core/handshaker/service"
+	altspb "github.com/micro/grpc-go/credentials/alts/core/proto/grpc_gcp"
+	"github.com/micro/grpc-go/grpclog"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/credentials/alts/core"
-	"google.golang.org/grpc/credentials/alts/core/handshaker"
-	"google.golang.org/grpc/credentials/alts/core/handshaker/service"
-	altspb "google.golang.org/grpc/credentials/alts/core/proto/grpc_gcp"
-	"google.golang.org/grpc/grpclog"
 )
 
 const (

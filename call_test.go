@@ -29,11 +29,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/micro/grpc-go/codes"
+	"github.com/micro/grpc-go/internal/leakcheck"
+	"github.com/micro/grpc-go/internal/transport"
+	"github.com/micro/grpc-go/status"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/internal/leakcheck"
-	"google.golang.org/grpc/internal/transport"
-	"google.golang.org/grpc/status"
 )
 
 var (

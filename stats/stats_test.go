@@ -30,12 +30,12 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
+	"github.com/micro/grpc-go"
+	"github.com/micro/grpc-go/metadata"
+	"github.com/micro/grpc-go/stats"
+	testpb "github.com/micro/grpc-go/stats/grpc_testing"
+	"github.com/micro/grpc-go/status"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/stats"
-	testpb "google.golang.org/grpc/stats/grpc_testing"
-	"google.golang.org/grpc/status"
 )
 
 func init() {

@@ -25,18 +25,18 @@ import (
 	"testing"
 	"time"
 
+	"github.com/micro/grpc-go/connectivity"
+	"github.com/micro/grpc-go/credentials"
+	"github.com/micro/grpc-go/internal/backoff"
+	"github.com/micro/grpc-go/internal/leakcheck"
+	"github.com/micro/grpc-go/keepalive"
+	"github.com/micro/grpc-go/naming"
+	"github.com/micro/grpc-go/resolver"
+	"github.com/micro/grpc-go/resolver/manual"
+	_ "github.com/micro/grpc-go/resolver/passthrough"
+	"github.com/micro/grpc-go/testdata"
 	"golang.org/x/net/context"
 	"golang.org/x/net/http2"
-	"google.golang.org/grpc/connectivity"
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/internal/backoff"
-	"google.golang.org/grpc/internal/leakcheck"
-	"google.golang.org/grpc/keepalive"
-	"google.golang.org/grpc/naming"
-	"google.golang.org/grpc/resolver"
-	"google.golang.org/grpc/resolver/manual"
-	_ "google.golang.org/grpc/resolver/passthrough"
-	"google.golang.org/grpc/testdata"
 )
 
 var (

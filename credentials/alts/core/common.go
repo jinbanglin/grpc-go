@@ -25,8 +25,8 @@ package core
 import (
 	"net"
 
+	"github.com/micro/grpc-go/credentials"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/credentials"
 )
 
 const (

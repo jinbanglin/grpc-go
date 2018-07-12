@@ -8,8 +8,8 @@ import fmt "fmt"
 import math "math"
 
 import (
+	grpc "github.com/micro/grpc-go"
 	context "golang.org/x/net/context"
-	grpc "google.golang.org/grpc"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -277,7 +277,7 @@ const _ = grpc.SupportPackageIsVersion4
 
 // MetricsServiceClient is the client API for MetricsService service.
 //
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/github.com/micro/grpc-go#ClientConn.NewStream.
 type MetricsServiceClient interface {
 	// Returns the values of all the gauges that are currently being maintained by
 	// the service

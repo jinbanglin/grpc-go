@@ -25,17 +25,17 @@ import (
 	"testing"
 	"time"
 
+	"github.com/micro/grpc-go"
+	"github.com/micro/grpc-go/balancer/roundrobin"
+	"github.com/micro/grpc-go/codes"
+	_ "github.com/micro/grpc-go/grpclog/glogger"
+	"github.com/micro/grpc-go/internal/leakcheck"
+	"github.com/micro/grpc-go/peer"
+	"github.com/micro/grpc-go/resolver"
+	"github.com/micro/grpc-go/resolver/manual"
+	"github.com/micro/grpc-go/status"
+	testpb "github.com/micro/grpc-go/test/grpc_testing"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/balancer/roundrobin"
-	"google.golang.org/grpc/codes"
-	_ "google.golang.org/grpc/grpclog/glogger"
-	"google.golang.org/grpc/internal/leakcheck"
-	"google.golang.org/grpc/peer"
-	"google.golang.org/grpc/resolver"
-	"google.golang.org/grpc/resolver/manual"
-	"google.golang.org/grpc/status"
-	testpb "google.golang.org/grpc/test/grpc_testing"
 )
 
 type testServer struct {
