@@ -28,7 +28,7 @@ import (
 	"github.com/micro/grpc-go/connectivity"
 	_ "github.com/micro/grpc-go/grpclog/glogger"
 	"github.com/micro/grpc-go/internal/leakcheck"
-	"github.com/micro/grpc-go/internal/transport"
+	"github.com/micro/grpc-go/transport"
 	"golang.org/x/net/context"
 )
 

@@ -45,12 +45,12 @@ import (
 	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/internal"
 	"github.com/micro/grpc-go/internal/channelz"
-	"github.com/micro/grpc-go/internal/transport"
 	"github.com/micro/grpc-go/keepalive"
 	"github.com/micro/grpc-go/metadata"
 	"github.com/micro/grpc-go/stats"
 	"github.com/micro/grpc-go/status"
 	"github.com/micro/grpc-go/tap"
+	"github.com/micro/grpc-go/transport"
 )
 
 const (

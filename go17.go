@@ -28,8 +28,8 @@ import (
 	"net/http"
 
 	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/internal/transport"
 	"github.com/micro/grpc-go/status"
+	"github.com/micro/grpc-go/transport"
 	netctx "golang.org/x/net/context"
 )
 

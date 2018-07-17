@@ -39,13 +39,13 @@ import (
 	"github.com/micro/grpc-go/internal/backoff"
 	"github.com/micro/grpc-go/internal/channelz"
 	"github.com/micro/grpc-go/internal/envconfig"
-	"github.com/micro/grpc-go/internal/transport"
 	"github.com/micro/grpc-go/keepalive"
 	"github.com/micro/grpc-go/resolver"
 	_ "github.com/micro/grpc-go/resolver/dns"         // To register dns resolver.
 	_ "github.com/micro/grpc-go/resolver/passthrough" // To register passthrough resolver.
 	"github.com/micro/grpc-go/stats"
 	"github.com/micro/grpc-go/status"
+	"github.com/micro/grpc-go/transport"
 	"golang.org/x/net/context"
 	"golang.org/x/net/trace"
 )

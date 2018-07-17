@@ -35,11 +35,11 @@ import (
 	"github.com/micro/grpc-go/credentials"
 	"github.com/micro/grpc-go/encoding"
 	"github.com/micro/grpc-go/encoding/proto"
-	"github.com/micro/grpc-go/internal/transport"
 	"github.com/micro/grpc-go/metadata"
 	"github.com/micro/grpc-go/peer"
 	"github.com/micro/grpc-go/stats"
 	"github.com/micro/grpc-go/status"
+	"github.com/micro/grpc-go/transport"
 	"golang.org/x/net/context"
 )
 

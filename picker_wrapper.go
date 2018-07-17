@@ -26,8 +26,8 @@ import (
 	"github.com/micro/grpc-go/codes"
 	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/internal/channelz"
-	"github.com/micro/grpc-go/internal/transport"
 	"github.com/micro/grpc-go/status"
+	"github.com/micro/grpc-go/transport"
 	"golang.org/x/net/context"
 )
 

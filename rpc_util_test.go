@@ -30,9 +30,9 @@ import (
 	"github.com/micro/grpc-go/codes"
 	"github.com/micro/grpc-go/encoding"
 	protoenc "github.com/micro/grpc-go/encoding/proto"
-	"github.com/micro/grpc-go/internal/transport"
 	"github.com/micro/grpc-go/status"
 	perfpb "github.com/micro/grpc-go/test/codec_perf"
+	"github.com/micro/grpc-go/transport"
 )
 
 type fullReader struct {

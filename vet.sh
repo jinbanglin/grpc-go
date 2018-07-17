@@ -78,7 +78,7 @@ fi
 
 # TODO(menghanl): fix errors in transport_test.
 staticcheck -ignore '
-github.com/micro/grpc-go/internal/transport/transport_test.go:SA2002
+github.com/micro/grpc-go/transport/transport_test.go:SA2002
 github.com/micro/grpc-go/benchmark/benchmain/main.go:SA1019
 github.com/micro/grpc-go/stats/stats_test.go:SA1019
 github.com/micro/grpc-go/test/end2end_test.go:SA1019

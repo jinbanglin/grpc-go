@@ -26,7 +26,7 @@ import (
 	"time"
 
 	"github.com/micro/grpc-go/internal/leakcheck"
-	"github.com/micro/grpc-go/internal/transport"
+	"github.com/micro/grpc-go/transport"
 	"golang.org/x/net/context"
 )
 
