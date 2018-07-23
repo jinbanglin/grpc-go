@@ -43,6 +43,14 @@ import (
 	"golang.org/x/net/context"
 )
 
+// baseCodec contains the functionality of both Codec and encoding.Codec, but
+// omits the name/string, which vary between the two and are not needed for
+// anything besides the registry in the encoding package.
+type baseCodec interface {
+        Marshal(v interface{}) ([]byte, error)
+        Unmarshal(data []byte, v interface{}) error
+}
+
 // Compressor defines the interface gRPC uses to compress a message.
 //
 // Deprecated: use package encoding.
@@ -56,6 +64,8 @@ type Compressor interface {
 type gzipCompressor struct {
 	pool sync.Pool
 }
+
+var _ baseCodec = encoding.Codec(nil)
 
 // NewGZIPCompressor creates a Compressor based on GZIP.
 //
