@@ -49,9 +49,6 @@ import (
 	"github.com/micro/grpc-go/credentials"
 	"github.com/micro/grpc-go/encoding"
 	_ "github.com/micro/grpc-go/encoding/gzip"
-	"github.com/micro/grpc-go/health"
-	healthgrpc "github.com/micro/grpc-go/health/grpc_health_v1"
-	healthpb "github.com/micro/grpc-go/health/grpc_health_v1"
 	"github.com/micro/grpc-go/internal"
 	"github.com/micro/grpc-go/internal/leakcheck"
 	"github.com/micro/grpc-go/keepalive"
@@ -445,7 +442,6 @@ type test struct {
 
 	// Configurable knobs, after newTest returns:
 	testServer              testpb.TestServiceServer // nil means none
-	healthServer            *health.Server           // nil means disabled
 	maxStream               uint32
 	tapHandle               tap.ServerInHandle
 	maxMsgSize              *int
@@ -606,9 +602,6 @@ func (te *test) listenAndServe(ts testpb.TestServiceServer, listen func(network,
 	te.srv = s
 	if te.e.httpHandler {
 		internal.TestingUseHandlerImpl(s)
-	}
-	if te.healthServer != nil {
-		healthgrpc.RegisterHealthServer(s, te.healthServer)
 	}
 	if te.testServer != nil {
 		testpb.RegisterTestServiceServer(s, te.testServer)
@@ -2255,158 +2248,6 @@ func testTap(t *testing.T, e env) {
 	if _, err := tc.UnaryCall(context.Background(), req); status.Code(err) != codes.Unavailable {
 		t.Fatalf("TestService/UnaryCall(_, _) = _, %v, want _, %s", err, codes.Unavailable)
 	}
-}
-
-func healthCheck(d time.Duration, cc *grpc.ClientConn, serviceName string) (*healthpb.HealthCheckResponse, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), d)
-	defer cancel()
-	hc := healthgrpc.NewHealthClient(cc)
-	req := &healthpb.HealthCheckRequest{
-		Service: serviceName,
-	}
-	return hc.Check(ctx, req)
-}
-
-func TestHealthCheckOnSuccess(t *testing.T) {
-	defer leakcheck.Check(t)
-	for _, e := range listTestEnv() {
-		testHealthCheckOnSuccess(t, e)
-	}
-}
-
-func testHealthCheckOnSuccess(t *testing.T, e env) {
-	te := newTest(t, e)
-	hs := health.NewServer()
-	hs.SetServingStatus("grpc.health.v1.Health", 1)
-	te.healthServer = hs
-	te.startServer(&testServer{security: e.security})
-	defer te.tearDown()
-
-	cc := te.clientConn()
-	if _, err := healthCheck(1*time.Second, cc, "grpc.health.v1.Health"); err != nil {
-		t.Fatalf("Health/Check(_, _) = _, %v, want _, <nil>", err)
-	}
-}
-
-func TestHealthCheckOnFailure(t *testing.T) {
-	defer leakcheck.Check(t)
-	for _, e := range listTestEnv() {
-		testHealthCheckOnFailure(t, e)
-	}
-}
-
-func testHealthCheckOnFailure(t *testing.T, e env) {
-	defer leakcheck.Check(t)
-	te := newTest(t, e)
-	te.declareLogNoise(
-		"Failed to dial ",
-		"grpc: the client connection is closing; please retry",
-	)
-	hs := health.NewServer()
-	hs.SetServingStatus("grpc.health.v1.HealthCheck", 1)
-	te.healthServer = hs
-	te.startServer(&testServer{security: e.security})
-	defer te.tearDown()
-
-	cc := te.clientConn()
-	wantErr := status.Error(codes.DeadlineExceeded, "context deadline exceeded")
-	if _, err := healthCheck(0*time.Second, cc, "grpc.health.v1.Health"); !reflect.DeepEqual(err, wantErr) {
-		t.Fatalf("Health/Check(_, _) = _, %v, want _, error code %s", err, codes.DeadlineExceeded)
-	}
-	awaitNewConnLogOutput()
-}
-
-func TestHealthCheckOff(t *testing.T) {
-	defer leakcheck.Check(t)
-	for _, e := range listTestEnv() {
-		// TODO(bradfitz): Temporarily skip this env due to #619.
-		if e.name == "handler-tls" {
-			continue
-		}
-		testHealthCheckOff(t, e)
-	}
-}
-
-func testHealthCheckOff(t *testing.T, e env) {
-	te := newTest(t, e)
-	te.startServer(&testServer{security: e.security})
-	defer te.tearDown()
-	want := status.Error(codes.Unimplemented, "unknown service grpc.health.v1.Health")
-	if _, err := healthCheck(1*time.Second, te.clientConn(), ""); !reflect.DeepEqual(err, want) {
-		t.Fatalf("Health/Check(_, _) = _, %v, want _, %v", err, want)
-	}
-}
-
-func TestUnknownHandler(t *testing.T) {
-	defer leakcheck.Check(t)
-	// An example unknownHandler that returns a different code and a different method, making sure that we do not
-	// expose what methods are implemented to a client that is not authenticated.
-	unknownHandler := func(srv interface{}, stream grpc.ServerStream) error {
-		return status.Error(codes.Unauthenticated, "user unauthenticated")
-	}
-	for _, e := range listTestEnv() {
-		// TODO(bradfitz): Temporarily skip this env due to #619.
-		if e.name == "handler-tls" {
-			continue
-		}
-		testUnknownHandler(t, e, unknownHandler)
-	}
-}
-
-func testUnknownHandler(t *testing.T, e env, unknownHandler grpc.StreamHandler) {
-	te := newTest(t, e)
-	te.unknownHandler = unknownHandler
-	te.startServer(&testServer{security: e.security})
-	defer te.tearDown()
-	want := status.Error(codes.Unauthenticated, "user unauthenticated")
-	if _, err := healthCheck(1*time.Second, te.clientConn(), ""); !reflect.DeepEqual(err, want) {
-		t.Fatalf("Health/Check(_, _) = _, %v, want _, %v", err, want)
-	}
-}
-
-func TestHealthCheckServingStatus(t *testing.T) {
-	defer leakcheck.Check(t)
-	for _, e := range listTestEnv() {
-		testHealthCheckServingStatus(t, e)
-	}
-}
-
-func testHealthCheckServingStatus(t *testing.T, e env) {
-	te := newTest(t, e)
-	hs := health.NewServer()
-	te.healthServer = hs
-	te.startServer(&testServer{security: e.security})
-	defer te.tearDown()
-
-	cc := te.clientConn()
-	out, err := healthCheck(1*time.Second, cc, "")
-	if err != nil {
-		t.Fatalf("Health/Check(_, _) = _, %v, want _, <nil>", err)
-	}
-	if out.Status != healthpb.HealthCheckResponse_SERVING {
-		t.Fatalf("Got the serving status %v, want SERVING", out.Status)
-	}
-	wantErr := status.Error(codes.NotFound, "unknown service")
-	if _, err := healthCheck(1*time.Second, cc, "grpc.health.v1.Health"); !reflect.DeepEqual(err, wantErr) {
-		t.Fatalf("Health/Check(_, _) = _, %v, want _, error code %s", err, codes.NotFound)
-	}
-	hs.SetServingStatus("grpc.health.v1.Health", healthpb.HealthCheckResponse_SERVING)
-	out, err = healthCheck(1*time.Second, cc, "grpc.health.v1.Health")
-	if err != nil {
-		t.Fatalf("Health/Check(_, _) = _, %v, want _, <nil>", err)
-	}
-	if out.Status != healthpb.HealthCheckResponse_SERVING {
-		t.Fatalf("Got the serving status %v, want SERVING", out.Status)
-	}
-	hs.SetServingStatus("grpc.health.v1.Health", healthpb.HealthCheckResponse_NOT_SERVING)
-	out, err = healthCheck(1*time.Second, cc, "grpc.health.v1.Health")
-	if err != nil {
-		t.Fatalf("Health/Check(_, _) = _, %v, want _, <nil>", err)
-	}
-	if out.Status != healthpb.HealthCheckResponse_NOT_SERVING {
-		t.Fatalf("Got the serving status %v, want NOT_SERVING", out.Status)
-	}
-
 }
 
 func TestEmptyUnaryWithUserAgent(t *testing.T) {
