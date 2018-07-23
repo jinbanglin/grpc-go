@@ -20,10 +20,10 @@
 
 package channelz
 
-import "github.com/micro/grpc-go/grpclog"
+import "github.com/micro/grpc-go/logger"
 
 func init() {
-	grpclog.Infof("Channelz: socket options are not supported on non-linux os and appengine.")
+	logger.Infof("Channelz: socket options are not supported on non-linux os and appengine.")
 }
 
 // SocketOptionData defines the struct to hold socket option data, and related

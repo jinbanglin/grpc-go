@@ -25,7 +25,7 @@ import (
 
 	"github.com/micro/grpc-go/codes"
 	"github.com/micro/grpc-go/credentials"
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/naming"
 	"github.com/micro/grpc-go/status"
 	"golang.org/x/net/context"
@@ -165,7 +165,7 @@ type roundRobin struct {
 func (rr *roundRobin) watchAddrUpdates() error {
 	updates, err := rr.w.Next()
 	if err != nil {
-		grpclog.Warningf("grpc: the naming watcher stops working due to %v.", err)
+		logger.Warningf("grpc: the naming watcher stops working due to %v.", err)
 		return err
 	}
 	rr.mu.Lock()
@@ -181,7 +181,7 @@ func (rr *roundRobin) watchAddrUpdates() error {
 			for _, v := range rr.addrs {
 				if addr == v.addr {
 					exist = true
-					grpclog.Infoln("grpc: The name resolver wanted to add an existing address: ", addr)
+					logger.Infoln("grpc: The name resolver wanted to add an existing address: ", addr)
 					break
 				}
 			}
@@ -198,7 +198,7 @@ func (rr *roundRobin) watchAddrUpdates() error {
 				}
 			}
 		default:
-			grpclog.Errorln("Unknown update.Op ", update.Op)
+			logger.Errorln("Unknown update.Op ", update.Op)
 		}
 	}
 	// Make a copy of rr.addrs and write it onto rr.addrCh so that gRPC internals gets notified.

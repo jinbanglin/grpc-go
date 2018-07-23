@@ -16,7 +16,7 @@
  *
  */
 
-// Package grpclog defines logging for grpc.
+// Package logger defines logging for grpc.
 //
 // All logs in transport package only go to verbose level 2.
 // All logs in other packages in grpc are logged in spite of the verbosity level.
@@ -24,11 +24,11 @@
 // In the default logger,
 // severity level can be set by environment variable GRPC_GO_LOG_SEVERITY_LEVEL,
 // verbosity level can be set by GRPC_GO_LOG_VERBOSITY_LEVEL.
-package grpclog // import "github.com/micro/grpc-go/grpclog"
+package logger
 
 import "os"
 
-var logger = newLoggerV2()
+var logger = newLogger()
 
 // V reports whether verbosity level l is at least the requested verbose level.
 func V(l int) bool {
@@ -102,25 +102,4 @@ func Fatalln(args ...interface{}) {
 	logger.Fatalln(args...)
 	// Make sure fatal logs will exit.
 	os.Exit(1)
-}
-
-// Print prints to the logger. Arguments are handled in the manner of fmt.Print.
-//
-// Deprecated: use Info.
-func Print(args ...interface{}) {
-	logger.Info(args...)
-}
-
-// Printf prints to the logger. Arguments are handled in the manner of fmt.Printf.
-//
-// Deprecated: use Infof.
-func Printf(format string, args ...interface{}) {
-	logger.Infof(format, args...)
-}
-
-// Println prints to the logger. Arguments are handled in the manner of fmt.Println.
-//
-// Deprecated: use Infoln.
-func Println(args ...interface{}) {
-	logger.Infoln(args...)
 }

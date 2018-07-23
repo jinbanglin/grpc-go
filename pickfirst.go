@@ -21,7 +21,7 @@ package grpc
 import (
 	"github.com/micro/grpc-go/balancer"
 	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/resolver"
 	"golang.org/x/net/context"
 )
@@ -50,13 +50,13 @@ type pickfirstBalancer struct {
 
 func (b *pickfirstBalancer) HandleResolvedAddrs(addrs []resolver.Address, err error) {
 	if err != nil {
-		grpclog.Infof("pickfirstBalancer: HandleResolvedAddrs called with error %v", err)
+		logger.Infof("pickfirstBalancer: HandleResolvedAddrs called with error %v", err)
 		return
 	}
 	if b.sc == nil {
 		b.sc, err = b.cc.NewSubConn(addrs, balancer.NewSubConnOptions{})
 		if err != nil {
-			grpclog.Errorf("pickfirstBalancer: failed to NewSubConn: %v", err)
+			logger.Errorf("pickfirstBalancer: failed to NewSubConn: %v", err)
 			return
 		}
 		b.cc.UpdateBalancerState(connectivity.Idle, &picker{sc: b.sc})
@@ -68,9 +68,9 @@ func (b *pickfirstBalancer) HandleResolvedAddrs(addrs []resolver.Address, err er
 }
 
 func (b *pickfirstBalancer) HandleSubConnStateChange(sc balancer.SubConn, s connectivity.State) {
-	grpclog.Infof("pickfirstBalancer: HandleSubConnStateChange: %p, %v", sc, s)
+	logger.Infof("pickfirstBalancer: HandleSubConnStateChange: %p, %v", sc, s)
 	if b.sc != sc {
-		grpclog.Infof("pickfirstBalancer: ignored state change because sc is not recognized")
+		logger.Infof("pickfirstBalancer: ignored state change because sc is not recognized")
 		return
 	}
 	if s == connectivity.Shutdown {

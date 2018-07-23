@@ -37,10 +37,10 @@ import (
 
 	"github.com/micro/grpc-go/codes"
 	"github.com/micro/grpc-go/credentials"
-	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/internal/channelz"
 	"github.com/micro/grpc-go/internal/grpcrand"
 	"github.com/micro/grpc-go/keepalive"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/metadata"
 	"github.com/micro/grpc-go/peer"
 	"github.com/micro/grpc-go/stats"
@@ -825,7 +825,7 @@ func (t *http2Server) WriteStatus(s *Stream, st *status.Status) error {
 		stBytes, err := proto.Marshal(p)
 		if err != nil {
 			// TODO: return error instead, when callers are able to handle it.
-			grpclog.Errorf("transport: failed to marshal rpc status: %v, error: %v", p, err)
+			logger.Errorf("transport: failed to marshal rpc status: %v, error: %v", p, err)
 		} else {
 			headerFields = append(headerFields, hpack.HeaderField{Name: "grpc-status-details-bin", Value: encodeBinHeader(stBytes)})
 		}

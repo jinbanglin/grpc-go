@@ -28,7 +28,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 )
 
 var (
@@ -160,7 +160,7 @@ func RegisterChannel(c Channel, pid int64, ref string) int64 {
 // by pid). It returns the unique channelz tracking id assigned to this subchannel.
 func RegisterSubChannel(c Channel, pid int64, ref string) int64 {
 	if pid == 0 {
-		grpclog.Error("a SubChannel's parent id cannot be 0")
+		logger.Error("a SubChannel's parent id cannot be 0")
 		return 0
 	}
 	id := idGen.genID()
@@ -196,7 +196,7 @@ func RegisterServer(s Server, ref string) int64 {
 // this listen socket.
 func RegisterListenSocket(s Socket, pid int64, ref string) int64 {
 	if pid == 0 {
-		grpclog.Error("a ListenSocket's parent id cannot be 0")
+		logger.Error("a ListenSocket's parent id cannot be 0")
 		return 0
 	}
 	id := idGen.genID()
@@ -211,7 +211,7 @@ func RegisterListenSocket(s Socket, pid int64, ref string) int64 {
 // this normal socket.
 func RegisterNormalSocket(s Socket, pid int64, ref string) int64 {
 	if pid == 0 {
-		grpclog.Error("a NormalSocket's parent id cannot be 0")
+		logger.Error("a NormalSocket's parent id cannot be 0")
 		return 0
 	}
 	id := idGen.genID()

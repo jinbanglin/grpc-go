@@ -21,7 +21,7 @@ package base
 import (
 	"github.com/micro/grpc-go/balancer"
 	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/resolver"
 	"golang.org/x/net/context"
 )
@@ -64,10 +64,10 @@ type baseBalancer struct {
 
 func (b *baseBalancer) HandleResolvedAddrs(addrs []resolver.Address, err error) {
 	if err != nil {
-		grpclog.Infof("base.baseBalancer: HandleResolvedAddrs called with error %v", err)
+		logger.Infof("base.baseBalancer: HandleResolvedAddrs called with error %v", err)
 		return
 	}
-	grpclog.Infoln("base.baseBalancer: got new resolved addresses: ", addrs)
+	logger.Infoln("base.baseBalancer: got new resolved addresses: ", addrs)
 	// addrsSet is the set converted from addrs, it's used for quick lookup of an address.
 	addrsSet := make(map[resolver.Address]struct{})
 	for _, a := range addrs {
@@ -76,7 +76,7 @@ func (b *baseBalancer) HandleResolvedAddrs(addrs []resolver.Address, err error) 
 			// a is a new address (not existing in b.subConns).
 			sc, err := b.cc.NewSubConn([]resolver.Address{a}, balancer.NewSubConnOptions{})
 			if err != nil {
-				grpclog.Warningf("base.baseBalancer: failed to create new SubConn: %v", err)
+				logger.Warningf("base.baseBalancer: failed to create new SubConn: %v", err)
 				continue
 			}
 			b.subConns[a] = sc
@@ -116,10 +116,10 @@ func (b *baseBalancer) regeneratePicker() {
 }
 
 func (b *baseBalancer) HandleSubConnStateChange(sc balancer.SubConn, s connectivity.State) {
-	grpclog.Infof("base.baseBalancer: handle SubConn state change: %p, %v", sc, s)
+	logger.Infof("base.baseBalancer: handle SubConn state change: %p, %v", sc, s)
 	oldS, ok := b.scStates[sc]
 	if !ok {
-		grpclog.Infof("base.baseBalancer: got state changes for an unknown SubConn: %p, %v", sc, s)
+		logger.Infof("base.baseBalancer: got state changes for an unknown SubConn: %p, %v", sc, s)
 		return
 	}
 	b.scStates[sc] = s

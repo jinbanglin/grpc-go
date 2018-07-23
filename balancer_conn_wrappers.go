@@ -24,7 +24,7 @@ import (
 
 	"github.com/micro/grpc-go/balancer"
 	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/resolver"
 )
 
@@ -274,7 +274,7 @@ func (acbw *acBalancerWrapper) UpdateAddresses(addrs []resolver.Address) {
 
 		ac, err := cc.newAddrConn(addrs)
 		if err != nil {
-			grpclog.Warningf("acBalancerWrapper: UpdateAddresses: failed to newAddrConn: %v", err)
+			logger.Warningf("acBalancerWrapper: UpdateAddresses: failed to newAddrConn: %v", err)
 			return
 		}
 		acbw.ac = ac

@@ -23,16 +23,16 @@ import (
 	"net"
 	"time"
 
-	"golang.org/x/net/context"
 	"github.com/micro/grpc-go/balancer"
 	"github.com/micro/grpc-go/credentials"
 	"github.com/micro/grpc-go/internal"
 	"github.com/micro/grpc-go/internal/backoff"
 	"github.com/micro/grpc-go/internal/envconfig"
-	"github.com/micro/grpc-go/transport"
 	"github.com/micro/grpc-go/keepalive"
 	"github.com/micro/grpc-go/resolver"
 	"github.com/micro/grpc-go/stats"
+	"github.com/micro/grpc-go/transport"
+	"golang.org/x/net/context"
 )
 
 // dialOptions configure a Dial call. dialOptions are set by the DialOption

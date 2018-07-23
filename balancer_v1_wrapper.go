@@ -25,7 +25,7 @@ import (
 	"github.com/micro/grpc-go/balancer"
 	"github.com/micro/grpc-go/codes"
 	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/resolver"
 	"github.com/micro/grpc-go/status"
 	"golang.org/x/net/context"
@@ -107,7 +107,7 @@ func (bw *balancerWrapper) lbWatcher() {
 		}
 		sc, err := bw.cc.NewSubConn([]resolver.Address{a}, balancer.NewSubConnOptions{})
 		if err != nil {
-			grpclog.Warningf("Error creating connection to %v. Err: %v", a, err)
+			logger.Warningf("Error creating connection to %v. Err: %v", a, err)
 		} else {
 			bw.mu.Lock()
 			bw.conns[a] = sc
@@ -122,7 +122,7 @@ func (bw *balancerWrapper) lbWatcher() {
 	}
 
 	for addrs := range notifyCh {
-		grpclog.Infof("balancerWrapper: got update addr from Notify: %v\n", addrs)
+		logger.Infof("balancerWrapper: got update addr from Notify: %v\n", addrs)
 		if bw.pickfirst {
 			var (
 				oldA  resolver.Address
@@ -159,7 +159,7 @@ func (bw *balancerWrapper) lbWatcher() {
 				// Create new sc.
 				sc, err := bw.cc.NewSubConn(newAddrs, balancer.NewSubConnOptions{})
 				if err != nil {
-					grpclog.Warningf("Error creating connection to %v. Err: %v", newAddrs, err)
+					logger.Warningf("Error creating connection to %v. Err: %v", newAddrs, err)
 				} else {
 					bw.mu.Lock()
 					// For pickfirst, there should be only one SubConn, so the
@@ -210,7 +210,7 @@ func (bw *balancerWrapper) lbWatcher() {
 			for _, a := range add {
 				sc, err := bw.cc.NewSubConn([]resolver.Address{a}, balancer.NewSubConnOptions{})
 				if err != nil {
-					grpclog.Warningf("Error creating connection to %v. Err: %v", a, err)
+					logger.Warningf("Error creating connection to %v. Err: %v", a, err)
 				} else {
 					bw.mu.Lock()
 					bw.conns[a] = sc

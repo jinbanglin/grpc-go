@@ -25,9 +25,9 @@ import (
 
 	grpc "github.com/micro/grpc-go"
 	"github.com/micro/grpc-go/credentials/alts"
-	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/interop"
 	testpb "github.com/micro/grpc-go/interop/grpc_testing"
+	"github.com/micro/grpc-go/logger"
 )
 
 var (
@@ -40,7 +40,7 @@ func main() {
 
 	lis, err := net.Listen("tcp", *serverAddr)
 	if err != nil {
-		grpclog.Fatalf("gRPC Server: failed to start the server at %v: %v", *serverAddr, err)
+		logger.Fatalf("gRPC Server: failed to start the server at %v: %v", *serverAddr, err)
 	}
 	opts := alts.DefaultServerOptions()
 	if *hsAddr != "" {

@@ -34,10 +34,10 @@ import (
 	"github.com/micro/grpc-go/codes"
 	"github.com/micro/grpc-go/connectivity"
 	"github.com/micro/grpc-go/credentials"
-	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/internal/backoff"
 	"github.com/micro/grpc-go/internal/channelz"
 	"github.com/micro/grpc-go/keepalive"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/resolver"
 	_ "github.com/micro/grpc-go/resolver/dns"         // To register dns resolver.
 	_ "github.com/micro/grpc-go/resolver/passthrough" // To register passthrough resolver.
@@ -221,13 +221,13 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 	if cc.dopts.resolverBuilder == nil {
 		// Only try to parse target when resolver builder is not already set.
 		cc.parsedTarget = parseTarget(cc.target)
-		grpclog.Infof("parsed scheme: %q", cc.parsedTarget.Scheme)
+		logger.Infof("parsed scheme: %q", cc.parsedTarget.Scheme)
 		cc.dopts.resolverBuilder = resolver.Get(cc.parsedTarget.Scheme)
 		if cc.dopts.resolverBuilder == nil {
 			// If resolver builder is still nil, the parse target's scheme is
 			// not registered. Fallback to default resolver and set Endpoint to
 			// the original unparsed target.
-			grpclog.Infof("scheme %q not registered, fallback to default scheme", cc.parsedTarget.Scheme)
+			logger.Infof("scheme %q not registered, fallback to default scheme", cc.parsedTarget.Scheme)
 			cc.parsedTarget = resolver.Target{
 				Scheme:   resolver.GetDefaultScheme(),
 				Endpoint: target,
@@ -494,9 +494,9 @@ func (cc *ClientConn) switchBalancer(name string) {
 		return
 	}
 
-	grpclog.Infof("ClientConn switching balancer to %q", name)
+	logger.Infof("ClientConn switching balancer to %q", name)
 	if cc.dopts.balancerBuilder != nil {
-		grpclog.Infoln("ignoring balancer switching: Balancer DialOption used instead")
+		logger.Infoln("ignoring balancer switching: Balancer DialOption used instead")
 		return
 	}
 	// TODO(bar switching) change this to two steps: drain and close.
@@ -507,7 +507,7 @@ func (cc *ClientConn) switchBalancer(name string) {
 
 	builder := balancer.Get(name)
 	if builder == nil {
-		grpclog.Infof("failed to get balancer builder for: %v, using pick_first instead", name)
+		logger.Infof("failed to get balancer builder for: %v, using pick_first instead", name)
 		builder = newPickfirstBuilder()
 	}
 	cc.preBalancerName = cc.curBalancerName
@@ -622,7 +622,7 @@ func (ac *addrConn) connect() error {
 	// Start a goroutine connecting to the server asynchronously.
 	go func() {
 		if err := ac.resetTransport(); err != nil {
-			grpclog.Warningf("Failed to dial %s: %v; please retry.", ac.addrs[0].Addr, err)
+			logger.Warningf("Failed to dial %s: %v; please retry.", ac.addrs[0].Addr, err)
 			if err != errConnClosing {
 				// Keep this ac in cc.conns, to get the reason it's torn down.
 				ac.tearDown(err)
@@ -643,7 +643,7 @@ func (ac *addrConn) connect() error {
 func (ac *addrConn) tryUpdateAddrs(addrs []resolver.Address) bool {
 	ac.mu.Lock()
 	defer ac.mu.Unlock()
-	grpclog.Infof("addrConn: tryUpdateAddrs curAddr: %v, addrs: %v", ac.curAddr, addrs)
+	logger.Infof("addrConn: tryUpdateAddrs curAddr: %v, addrs: %v", ac.curAddr, addrs)
 	if ac.state == connectivity.Shutdown {
 		ac.addrs = addrs
 		return true
@@ -656,7 +656,7 @@ func (ac *addrConn) tryUpdateAddrs(addrs []resolver.Address) bool {
 			break
 		}
 	}
-	grpclog.Infof("addrConn: tryUpdateAddrs curAddrFound: %v", curAddrFound)
+	logger.Infof("addrConn: tryUpdateAddrs curAddrFound: %v", curAddrFound)
 	if curAddrFound {
 		ac.addrs = addrs
 		ac.reconnectIdx = 0 // Start reconnecting from beginning in the new list.
@@ -977,7 +977,7 @@ func (ac *addrConn) createTransport(connectRetryNum, ridx int, backoffDeadline, 
 				return false, errConnClosing
 			}
 			ac.mu.Unlock()
-			grpclog.Warningf("grpc: addrConn.createTransport failed to connect to %v. Err :%v. Reconnecting...", addr, err)
+			logger.Warningf("grpc: addrConn.createTransport failed to connect to %v. Err :%v. Reconnecting...", addr, err)
 			continue
 		}
 		if ac.dopts.waitForHandshake {
@@ -985,7 +985,7 @@ func (ac *addrConn) createTransport(connectRetryNum, ridx int, backoffDeadline, 
 			case <-done:
 			case <-connectCtx.Done():
 				// Didn't receive server preface, must kill this new transport now.
-				grpclog.Warningf("grpc: addrConn.createTransport failed to receive server preface before deadline.")
+				logger.Warningf("grpc: addrConn.createTransport failed to receive server preface before deadline.")
 				newTr.Close()
 				continue
 			case <-ac.ctx.Done():
@@ -1084,7 +1084,7 @@ func (ac *addrConn) transportMonitor() {
 			timer = nil
 			// No server preface received until deadline.
 			// Kill the connection.
-			grpclog.Warningf("grpc: addrConn.transportMonitor didn't get server preface after waiting. Closing the new transport now.")
+			logger.Warningf("grpc: addrConn.transportMonitor didn't get server preface after waiting. Closing the new transport now.")
 			t.Close()
 		}
 		if timer != nil {
@@ -1113,7 +1113,7 @@ func (ac *addrConn) transportMonitor() {
 			ac.mu.Lock()
 			ac.printf("transport exiting: %v", err)
 			ac.mu.Unlock()
-			grpclog.Warningf("grpc: addrConn.transportMonitor exits due to: %v", err)
+			logger.Warningf("grpc: addrConn.transportMonitor exits due to: %v", err)
 			if err != errConnClosing {
 				// Keep this ac in cc.conns, to get the reason it's torn down.
 				ac.tearDown(err)

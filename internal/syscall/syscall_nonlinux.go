@@ -20,10 +20,10 @@
 
 package syscall
 
-import "google.golang.org/grpc/grpclog"
+import "github.com/micro/grpc-go/logger"
 
 func init() {
-	grpclog.Info("CPU time info is unavailable on non-linux or appengine environment.")
+	logger.Info("CPU time info is unavailable on non-linux or appengine environment.")
 }
 
 // GetCPUTime returns the how much CPU time has passed since the start of this process.

@@ -36,8 +36,8 @@ import (
 	"github.com/micro/grpc-go/balancer"
 	lbpb "github.com/micro/grpc-go/balancer/grpclb/grpc_lb_v1"
 	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/internal/backoff"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/resolver"
 	"golang.org/x/net/context"
 )
@@ -250,13 +250,13 @@ func (lb *lbBalancer) regeneratePicker() {
 }
 
 func (lb *lbBalancer) HandleSubConnStateChange(sc balancer.SubConn, s connectivity.State) {
-	grpclog.Infof("lbBalancer: handle SubConn state change: %p, %v", sc, s)
+	logger.Infof("lbBalancer: handle SubConn state change: %p, %v", sc, s)
 	lb.mu.Lock()
 	defer lb.mu.Unlock()
 
 	oldS, ok := lb.scStates[sc]
 	if !ok {
-		grpclog.Infof("lbBalancer: got state changes for an unknown SubConn: %p, %v", sc, s)
+		logger.Infof("lbBalancer: got state changes for an unknown SubConn: %p, %v", sc, s)
 		return
 	}
 	lb.scStates[sc] = s
@@ -310,7 +310,7 @@ func (lb *lbBalancer) fallbackToBackendsAfter(fallbackTimeout time.Duration) {
 // clientConn. The remoteLB clientConn will handle creating/removing remoteLB
 // connections.
 func (lb *lbBalancer) HandleResolvedAddrs(addrs []resolver.Address, err error) {
-	grpclog.Infof("lbBalancer: handleResolvedResult: %+v", addrs)
+	logger.Infof("lbBalancer: handleResolvedResult: %+v", addrs)
 	if len(addrs) <= 0 {
 		return
 	}
@@ -326,7 +326,7 @@ func (lb *lbBalancer) HandleResolvedAddrs(addrs []resolver.Address, err error) {
 
 	if lb.ccRemoteLB == nil {
 		if len(remoteBalancerAddrs) <= 0 {
-			grpclog.Errorf("grpclb: no remote balancer address is available, should never happen")
+			logger.Errorf("grpclb: no remote balancer address is available, should never happen")
 			return
 		}
 		// First time receiving resolved addresses, create a cc to remote

@@ -35,7 +35,7 @@ import (
 	"github.com/micro/grpc-go/credentials/alts/core/handshaker"
 	"github.com/micro/grpc-go/credentials/alts/core/handshaker/service"
 	altspb "github.com/micro/grpc-go/credentials/alts/core/proto/grpc_gcp"
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 	"golang.org/x/net/context"
 )
 
@@ -306,7 +306,7 @@ func compareRPCVersions(v1, v2 *altspb.RpcProtocolVersions_Version) int {
 // agreed on.
 func checkRPCVersions(local, peer *altspb.RpcProtocolVersions) (bool, *altspb.RpcProtocolVersions_Version) {
 	if local == nil || peer == nil {
-		grpclog.Error("invalid checkRPCVersions argument, either local or peer is nil.")
+		logger.Error("invalid checkRPCVersions argument, either local or peer is nil.")
 		return false, nil
 	}
 

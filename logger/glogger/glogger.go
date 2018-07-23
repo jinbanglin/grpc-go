@@ -17,18 +17,18 @@
  */
 
 // Package glogger defines glog-based logging for grpc.
-// Importing this package will install glog as the logger used by grpclog.
+// Importing this package will install glog as the logger used by logger.
 package glogger
 
 import (
 	"fmt"
 
 	"github.com/golang/glog"
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 )
 
 func init() {
-	grpclog.SetLoggerV2(&glogger{})
+	logger.SetLogger(&glogger{})
 }
 
 type glogger struct{}

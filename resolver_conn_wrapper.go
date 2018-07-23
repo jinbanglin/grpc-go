@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/resolver"
 )
 
@@ -113,7 +113,7 @@ func (ccr *ccResolverWrapper) watcher() {
 				return
 			default:
 			}
-			grpclog.Infof("ccResolverWrapper: sending new addresses to cc: %v", addrs)
+			logger.Infof("ccResolverWrapper: sending new addresses to cc: %v", addrs)
 			ccr.cc.handleResolvedAddrs(addrs, nil)
 		case sc := <-ccr.scCh:
 			select {
@@ -121,7 +121,7 @@ func (ccr *ccResolverWrapper) watcher() {
 				return
 			default:
 			}
-			grpclog.Infof("ccResolverWrapper: got new service config: %v", sc)
+			logger.Infof("ccResolverWrapper: got new service config: %v", sc)
 			ccr.cc.handleServiceConfig(sc)
 		case <-ccr.done:
 			return

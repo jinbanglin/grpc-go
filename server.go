@@ -42,10 +42,10 @@ import (
 	"github.com/micro/grpc-go/credentials"
 	"github.com/micro/grpc-go/encoding"
 	"github.com/micro/grpc-go/encoding/proto"
-	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/internal"
 	"github.com/micro/grpc-go/internal/channelz"
 	"github.com/micro/grpc-go/keepalive"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/metadata"
 	"github.com/micro/grpc-go/stats"
 	"github.com/micro/grpc-go/status"
@@ -402,7 +402,7 @@ func (s *Server) RegisterService(sd *ServiceDesc, ss interface{}) {
 	ht := reflect.TypeOf(sd.HandlerType).Elem()
 	st := reflect.TypeOf(ss)
 	if !st.Implements(ht) {
-		grpclog.Fatalf("grpc: Server.RegisterService found the handler of type %v that does not satisfy %v", st, ht)
+		logger.Fatalf("grpc: Server.RegisterService found the handler of type %v that does not satisfy %v", st, ht)
 	}
 	s.register(sd, ss)
 }
@@ -412,10 +412,10 @@ func (s *Server) register(sd *ServiceDesc, ss interface{}) {
 	defer s.mu.Unlock()
 	s.printf("RegisterService(%q)", sd.ServiceName)
 	if s.serve {
-		grpclog.Fatalf("grpc: Server.RegisterService after Server.Serve for %q", sd.ServiceName)
+		logger.Fatalf("grpc: Server.RegisterService after Server.Serve for %q", sd.ServiceName)
 	}
 	if _, ok := s.m[sd.ServiceName]; ok {
-		grpclog.Fatalf("grpc: Server.RegisterService found duplicate service registration for %q", sd.ServiceName)
+		logger.Fatalf("grpc: Server.RegisterService found duplicate service registration for %q", sd.ServiceName)
 	}
 	srv := &service{
 		server: ss,
@@ -618,7 +618,7 @@ func (s *Server) handleRawConn(rawConn net.Conn) {
 		s.mu.Lock()
 		s.errorf("ServerHandshake(%q) failed: %v", rawConn.RemoteAddr(), err)
 		s.mu.Unlock()
-		grpclog.Warningf("grpc: Server.Serve failed to complete security handshake from %q: %v", rawConn.RemoteAddr(), err)
+		logger.Warningf("grpc: Server.Serve failed to complete security handshake from %q: %v", rawConn.RemoteAddr(), err)
 		// If serverHandshake returns ErrConnDispatched, keep rawConn open.
 		if err != credentials.ErrConnDispatched {
 			rawConn.Close()
@@ -682,7 +682,7 @@ func (s *Server) newHTTP2Transport(c net.Conn, authInfo credentials.AuthInfo) tr
 		s.errorf("NewServerTransport(%q) failed: %v", c.RemoteAddr(), err)
 		s.mu.Unlock()
 		c.Close()
-		grpclog.Warningln("grpc: Server.Serve failed to create ServerTransport: ", err)
+		logger.Warningln("grpc: Server.Serve failed to create ServerTransport: ", err)
 		return nil
 	}
 
@@ -848,12 +848,12 @@ func (s *Server) incrCallsFailed() {
 func (s *Server) sendResponse(t transport.ServerTransport, stream *transport.Stream, msg interface{}, cp Compressor, opts *transport.Options, comp encoding.Compressor) error {
 	data, err := encode(s.getCodec(stream.ContentSubtype()), msg)
 	if err != nil {
-		grpclog.Errorln("grpc: server failed to encode response: ", err)
+		logger.Errorln("grpc: server failed to encode response: ", err)
 		return err
 	}
 	compData, err := compress(data, cp, comp)
 	if err != nil {
-		grpclog.Errorln("grpc: server failed to compress response: ", err)
+		logger.Errorln("grpc: server failed to compress response: ", err)
 		return err
 	}
 	hdr, payload := msgHeader(data, compData)
@@ -957,7 +957,7 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 	if err != nil {
 		if st, ok := status.FromError(err); ok {
 			if e := t.WriteStatus(stream, st); e != nil {
-				grpclog.Warningf("grpc: Server.processUnaryRPC failed to write status %v", e)
+				logger.Warningf("grpc: Server.processUnaryRPC failed to write status %v", e)
 			}
 		} else {
 			switch st := err.(type) {
@@ -965,7 +965,7 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 				// Nothing to do here.
 			case transport.StreamError:
 				if e := t.WriteStatus(stream, status.New(st.Code, st.Desc)); e != nil {
-					grpclog.Warningf("grpc: Server.processUnaryRPC failed to write status %v", e)
+					logger.Warningf("grpc: Server.processUnaryRPC failed to write status %v", e)
 				}
 			default:
 				panic(fmt.Sprintf("grpc: Unexpected error (%T) from recvMsg: %v", st, st))
@@ -978,7 +978,7 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 	}
 	if st := checkRecvPayload(pf, stream.RecvCompress(), dc != nil || decomp != nil); st != nil {
 		if e := t.WriteStatus(stream, st); e != nil {
-			grpclog.Warningf("grpc: Server.processUnaryRPC failed to write status %v", e)
+			logger.Warningf("grpc: Server.processUnaryRPC failed to write status %v", e)
 		}
 		return st.Err()
 	}
@@ -1040,7 +1040,7 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 			trInfo.tr.SetError()
 		}
 		if e := t.WriteStatus(stream, appStatus); e != nil {
-			grpclog.Warningf("grpc: Server.processUnaryRPC failed to write status: %v", e)
+			logger.Warningf("grpc: Server.processUnaryRPC failed to write status: %v", e)
 		}
 		return appErr
 	}
@@ -1056,7 +1056,7 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 		}
 		if s, ok := status.FromError(err); ok {
 			if e := t.WriteStatus(stream, s); e != nil {
-				grpclog.Warningf("grpc: Server.processUnaryRPC failed to write status: %v", e)
+				logger.Warningf("grpc: Server.processUnaryRPC failed to write status: %v", e)
 			}
 		} else {
 			switch st := err.(type) {
@@ -1064,7 +1064,7 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 				// Nothing to do here.
 			case transport.StreamError:
 				if e := t.WriteStatus(stream, status.New(st.Code, st.Desc)); e != nil {
-					grpclog.Warningf("grpc: Server.processUnaryRPC failed to write status %v", e)
+					logger.Warningf("grpc: Server.processUnaryRPC failed to write status %v", e)
 				}
 			default:
 				panic(fmt.Sprintf("grpc: Unexpected error (%T) from sendResponse: %v", st, st))
@@ -1228,7 +1228,7 @@ func (s *Server) handleStream(t transport.ServerTransport, stream *transport.Str
 				trInfo.tr.LazyLog(&fmtStringer{"%v", []interface{}{err}}, true)
 				trInfo.tr.SetError()
 			}
-			grpclog.Warningf("grpc: Server.handleStream failed to write status: %v", err)
+			logger.Warningf("grpc: Server.handleStream failed to write status: %v", err)
 		}
 		if trInfo != nil {
 			trInfo.tr.Finish()
@@ -1253,7 +1253,7 @@ func (s *Server) handleStream(t transport.ServerTransport, stream *transport.Str
 				trInfo.tr.LazyLog(&fmtStringer{"%v", []interface{}{err}}, true)
 				trInfo.tr.SetError()
 			}
-			grpclog.Warningf("grpc: Server.handleStream failed to write status: %v", err)
+			logger.Warningf("grpc: Server.handleStream failed to write status: %v", err)
 		}
 		if trInfo != nil {
 			trInfo.tr.Finish()
@@ -1283,7 +1283,7 @@ func (s *Server) handleStream(t transport.ServerTransport, stream *transport.Str
 			trInfo.tr.LazyLog(&fmtStringer{"%v", []interface{}{err}}, true)
 			trInfo.tr.SetError()
 		}
-		grpclog.Warningf("grpc: Server.handleStream failed to write status: %v", err)
+		logger.Warningf("grpc: Server.handleStream failed to write status: %v", err)
 	}
 	if trInfo != nil {
 		trInfo.tr.Finish()

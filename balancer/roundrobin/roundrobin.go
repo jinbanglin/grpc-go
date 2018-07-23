@@ -26,7 +26,7 @@ import (
 
 	"github.com/micro/grpc-go/balancer"
 	"github.com/micro/grpc-go/balancer/base"
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/resolver"
 	"golang.org/x/net/context"
 )
@@ -46,7 +46,7 @@ func init() {
 type rrPickerBuilder struct{}
 
 func (*rrPickerBuilder) Build(readySCs map[resolver.Address]balancer.SubConn) balancer.Picker {
-	grpclog.Infof("roundrobinPicker: newPicker called with readySCs: %v", readySCs)
+	logger.Infof("roundrobinPicker: newPicker called with readySCs: %v", readySCs)
 	var scs []balancer.SubConn
 	for _, sc := range readySCs {
 		scs = append(scs, sc)

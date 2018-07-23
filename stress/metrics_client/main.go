@@ -24,7 +24,7 @@ import (
 	"io"
 
 	"github.com/micro/grpc-go"
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 	metricspb "github.com/micro/grpc-go/stress/grpc_testing"
 	"golang.org/x/net/context"
 )
@@ -37,7 +37,7 @@ var (
 func printMetrics(client metricspb.MetricsServiceClient, totalOnly bool) {
 	stream, err := client.GetAllGauges(context.Background(), &metricspb.EmptyMessage{})
 	if err != nil {
-		grpclog.Fatalf("failed to call GetAllGuages: %v", err)
+		logger.Fatalf("failed to call GetAllGuages: %v", err)
 	}
 
 	var (
@@ -55,25 +55,25 @@ func printMetrics(client metricspb.MetricsServiceClient, totalOnly bool) {
 		}
 		v := gaugeResponse.GetLongValue()
 		if !totalOnly {
-			grpclog.Infof("%s: %d", gaugeResponse.Name, v)
+			logger.Infof("%s: %d", gaugeResponse.Name, v)
 		}
 		overallQPS += v
 	}
 	if rpcStatus != io.EOF {
-		grpclog.Fatalf("failed to finish server streaming: %v", rpcStatus)
+		logger.Fatalf("failed to finish server streaming: %v", rpcStatus)
 	}
-	grpclog.Infof("overall qps: %d", overallQPS)
+	logger.Infof("overall qps: %d", overallQPS)
 }
 
 func main() {
 	flag.Parse()
 	if *metricsServerAddress == "" {
-		grpclog.Fatalf("Metrics server address is empty.")
+		logger.Fatalf("Metrics server address is empty.")
 	}
 
 	conn, err := grpc.Dial(*metricsServerAddress, grpc.WithInsecure())
 	if err != nil {
-		grpclog.Fatalf("cannot connect to metrics server: %v", err)
+		logger.Fatalf("cannot connect to metrics server: %v", err)
 	}
 	defer conn.Close()
 

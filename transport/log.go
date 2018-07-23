@@ -16,35 +16,35 @@
  *
  */
 
-// This file contains wrappers for grpclog functions.
+// This file contains wrappers for logger functions.
 // The transport package only logs to verbose level 2 by default.
 
 package transport
 
-import "github.com/micro/grpc-go/grpclog"
+import "github.com/micro/grpc-go/logger"
 
 const logLevel = 2
 
 func infof(format string, args ...interface{}) {
-	if grpclog.V(logLevel) {
-		grpclog.Infof(format, args...)
+	if logger.V(logLevel) {
+		logger.Infof(format, args...)
 	}
 }
 
 func warningf(format string, args ...interface{}) {
-	if grpclog.V(logLevel) {
-		grpclog.Warningf(format, args...)
+	if logger.V(logLevel) {
+		logger.Warningf(format, args...)
 	}
 }
 
 func errorf(format string, args ...interface{}) {
-	if grpclog.V(logLevel) {
-		grpclog.Errorf(format, args...)
+	if logger.V(logLevel) {
+		logger.Errorf(format, args...)
 	}
 }
 
 func fatalf(format string, args ...interface{}) {
-	if grpclog.V(logLevel) {
-		grpclog.Fatalf(format, args...)
+	if logger.V(logLevel) {
+		logger.Fatalf(format, args...)
 	}
 }

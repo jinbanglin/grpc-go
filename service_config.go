@@ -26,7 +26,7 @@ import (
 	"time"
 
 	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 )
 
 const maxInt = int(^uint(0) >> 1)
@@ -232,7 +232,7 @@ func parseServiceConfig(js string) (ServiceConfig, error) {
 	var rsc jsonSC
 	err := json.Unmarshal([]byte(js), &rsc)
 	if err != nil {
-		grpclog.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
+		logger.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
 		return ServiceConfig{}, err
 	}
 	sc := ServiceConfig{
@@ -250,7 +250,7 @@ func parseServiceConfig(js string) (ServiceConfig, error) {
 		}
 		d, err := parseDuration(m.Timeout)
 		if err != nil {
-			grpclog.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
+			logger.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
 			return ServiceConfig{}, err
 		}
 
@@ -259,7 +259,7 @@ func parseServiceConfig(js string) (ServiceConfig, error) {
 			Timeout:      d,
 		}
 		if mc.retryPolicy, err = convertRetryPolicy(m.RetryPolicy); err != nil {
-			grpclog.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
+			logger.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
 			return ServiceConfig{}, err
 		}
 		if m.MaxRequestMessageBytes != nil {
@@ -312,7 +312,7 @@ func convertRetryPolicy(jrp *jsonRetryPolicy) (p *retryPolicy, err error) {
 		*mb <= 0 ||
 		jrp.BackoffMultiplier <= 0 ||
 		len(jrp.RetryableStatusCodes) == 0 {
-		grpclog.Warningf("grpc: ignoring retry policy %v due to illegal configuration", jrp)
+		logger.Warningf("grpc: ignoring retry policy %v due to illegal configuration", jrp)
 		return nil, nil
 	}
 

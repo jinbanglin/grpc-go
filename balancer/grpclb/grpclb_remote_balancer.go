@@ -30,9 +30,9 @@ import (
 	"github.com/micro/grpc-go/balancer"
 	lbpb "github.com/micro/grpc-go/balancer/grpclb/grpc_lb_v1"
 	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/internal"
 	"github.com/micro/grpc-go/internal/channelz"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/metadata"
 	"github.com/micro/grpc-go/resolver"
 	"golang.org/x/net/context"
@@ -41,7 +41,7 @@ import (
 // processServerList updates balaner's internal state, create/remove SubConns
 // and regenerates picker using the received serverList.
 func (lb *lbBalancer) processServerList(l *lbpb.ServerList) {
-	grpclog.Infof("lbBalancer: processing server list: %+v", l)
+	logger.Infof("lbBalancer: processing server list: %+v", l)
 	lb.mu.Lock()
 	defer lb.mu.Unlock()
 
@@ -51,7 +51,7 @@ func (lb *lbBalancer) processServerList(l *lbpb.ServerList) {
 
 	// If the new server list == old server list, do nothing.
 	if reflect.DeepEqual(lb.fullServerList, l.Servers) {
-		grpclog.Infof("lbBalancer: new serverlist same as the previous one, ignoring")
+		logger.Infof("lbBalancer: new serverlist same as the previous one, ignoring")
 		return
 	}
 	lb.fullServerList = l.Servers
@@ -74,7 +74,7 @@ func (lb *lbBalancer) processServerList(l *lbpb.ServerList) {
 			Addr:     fmt.Sprintf("%s:%d", ipStr, s.Port),
 			Metadata: &md,
 		}
-		grpclog.Infof("lbBalancer: server list entry[%d]: ipStr:|%s|, port:|%d|, load balancer token:|%v|",
+		logger.Infof("lbBalancer: server list entry[%d]: ipStr:|%s|, port:|%d|, load balancer token:|%v|",
 			i, ipStr, s.Port, s.LoadBalanceToken)
 		backendAddrs = append(backendAddrs, addr)
 	}
@@ -115,7 +115,7 @@ func (lb *lbBalancer) refreshSubConns(backendAddrs []resolver.Address) bool {
 			// Use addrWithMD to create the SubConn.
 			sc, err := lb.cc.NewSubConn([]resolver.Address{addr}, balancer.NewSubConnOptions{})
 			if err != nil {
-				grpclog.Warningf("roundrobinBalancer: failed to create new SubConn: %v", err)
+				logger.Warningf("roundrobinBalancer: failed to create new SubConn: %v", err)
 				continue
 			}
 			lb.subConns[addrWithoutMD] = sc // Use the addr without MD as key for the map.
@@ -234,9 +234,9 @@ func (lb *lbBalancer) watchRemoteBalancer() {
 		default:
 			if err != nil {
 				if err == errServerTerminatedConnection {
-					grpclog.Info(err)
+					logger.Info(err)
 				} else {
-					grpclog.Error(err)
+					logger.Error(err)
 				}
 			}
 		}
@@ -263,7 +263,7 @@ func (lb *lbBalancer) dialRemoteLB(remoteLBName string) {
 		if err := creds.OverrideServerName(remoteLBName); err == nil {
 			dopts = append(dopts, grpc.WithTransportCredentials(creds))
 		} else {
-			grpclog.Warningf("grpclb: failed to override the server name in the credentials: %v, using Insecure", err)
+			logger.Warningf("grpclb: failed to override the server name in the credentials: %v, using Insecure", err)
 			dopts = append(dopts, grpc.WithInsecure())
 		}
 	} else {
@@ -287,7 +287,7 @@ func (lb *lbBalancer) dialRemoteLB(remoteLBName string) {
 	// when init grpclb. The target name is not important.
 	cc, err := grpc.DialContext(context.Background(), "grpclb:///grpclb.server", dopts...)
 	if err != nil {
-		grpclog.Fatalf("failed to dial: %v", err)
+		logger.Fatalf("failed to dial: %v", err)
 	}
 	lb.ccRemoteLB = cc
 	go lb.watchRemoteBalancer()

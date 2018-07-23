@@ -22,7 +22,7 @@
 package connectivity
 
 import (
-	"github.com/micro/grpc-go/grpclog"
+	"github.com/micro/grpc-go/logger"
 	"golang.org/x/net/context"
 )
 
@@ -43,7 +43,7 @@ func (s State) String() string {
 	case Shutdown:
 		return "SHUTDOWN"
 	default:
-		grpclog.Errorf("unknown connectivity state: %d", s)
+		logger.Errorf("unknown connectivity state: %d", s)
 		return "Invalid-State"
 	}
 }

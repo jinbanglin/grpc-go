@@ -26,9 +26,9 @@ import (
 	"github.com/micro/grpc-go"
 	"github.com/micro/grpc-go/credentials"
 	"github.com/micro/grpc-go/credentials/alts"
-	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/interop"
 	testpb "github.com/micro/grpc-go/interop/grpc_testing"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/testdata"
 )
 
@@ -44,12 +44,12 @@ var (
 func main() {
 	flag.Parse()
 	if *useTLS && *useALTS {
-		grpclog.Fatalf("use_tls and use_alts cannot be both set to true")
+		logger.Fatalf("use_tls and use_alts cannot be both set to true")
 	}
 	p := strconv.Itoa(*port)
 	lis, err := net.Listen("tcp", ":"+p)
 	if err != nil {
-		grpclog.Fatalf("failed to listen: %v", err)
+		logger.Fatalf("failed to listen: %v", err)
 	}
 	var opts []grpc.ServerOption
 	if *useTLS {
@@ -61,7 +61,7 @@ func main() {
 		}
 		creds, err := credentials.NewServerTLSFromFile(*certFile, *keyFile)
 		if err != nil {
-			grpclog.Fatalf("Failed to generate credentials %v", err)
+			logger.Fatalf("Failed to generate credentials %v", err)
 		}
 		opts = append(opts, grpc.Creds(creds))
 	} else if *useALTS {

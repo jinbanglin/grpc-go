@@ -31,9 +31,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/internal/backoff"
 	"github.com/micro/grpc-go/internal/grpcrand"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/resolver"
 	"golang.org/x/net/context"
 )
@@ -220,19 +220,19 @@ func (d *dnsResolver) lookupSRV() []resolver.Address {
 	var newAddrs []resolver.Address
 	_, srvs, err := lookupSRV(d.ctx, "grpclb", "tcp", d.host)
 	if err != nil {
-		grpclog.Infof("grpc: failed dns SRV record lookup due to %v.\n", err)
+		logger.Infof("grpc: failed dns SRV record lookup due to %v.\n", err)
 		return nil
 	}
 	for _, s := range srvs {
 		lbAddrs, err := lookupHost(d.ctx, s.Target)
 		if err != nil {
-			grpclog.Infof("grpc: failed load balancer address dns lookup due to %v.\n", err)
+			logger.Infof("grpc: failed load balancer address dns lookup due to %v.\n", err)
 			continue
 		}
 		for _, a := range lbAddrs {
 			a, ok := formatIP(a)
 			if !ok {
-				grpclog.Errorf("grpc: failed IP parsing due to %v.\n", err)
+				logger.Errorf("grpc: failed IP parsing due to %v.\n", err)
 				continue
 			}
 			addr := a + ":" + strconv.Itoa(int(s.Port))
@@ -245,7 +245,7 @@ func (d *dnsResolver) lookupSRV() []resolver.Address {
 func (d *dnsResolver) lookupTXT() string {
 	ss, err := lookupTXT(d.ctx, d.host)
 	if err != nil {
-		grpclog.Infof("grpc: failed dns TXT record lookup due to %v.\n", err)
+		logger.Infof("grpc: failed dns TXT record lookup due to %v.\n", err)
 		return ""
 	}
 	var res string
@@ -255,7 +255,7 @@ func (d *dnsResolver) lookupTXT() string {
 
 	// TXT record must have "grpc_config=" attribute in order to be used as service config.
 	if !strings.HasPrefix(res, txtAttribute) {
-		grpclog.Warningf("grpc: TXT record %v missing %v attribute", res, txtAttribute)
+		logger.Warningf("grpc: TXT record %v missing %v attribute", res, txtAttribute)
 		return ""
 	}
 	return strings.TrimPrefix(res, txtAttribute)
@@ -265,13 +265,13 @@ func (d *dnsResolver) lookupHost() []resolver.Address {
 	var newAddrs []resolver.Address
 	addrs, err := lookupHost(d.ctx, d.host)
 	if err != nil {
-		grpclog.Warningf("grpc: failed dns A record lookup due to %v.\n", err)
+		logger.Warningf("grpc: failed dns A record lookup due to %v.\n", err)
 		return nil
 	}
 	for _, a := range addrs {
 		a, ok := formatIP(a)
 		if !ok {
-			grpclog.Errorf("grpc: failed IP parsing due to %v.\n", err)
+			logger.Errorf("grpc: failed IP parsing due to %v.\n", err)
 			continue
 		}
 		addr := a + ":" + d.port
@@ -374,12 +374,12 @@ func canaryingSC(js string) string {
 	var rcs []rawChoice
 	err := json.Unmarshal([]byte(js), &rcs)
 	if err != nil {
-		grpclog.Warningf("grpc: failed to parse service config json string due to %v.\n", err)
+		logger.Warningf("grpc: failed to parse service config json string due to %v.\n", err)
 		return ""
 	}
 	cliHostname, err := os.Hostname()
 	if err != nil {
-		grpclog.Warningf("grpc: failed to get client hostname due to %v.\n", err)
+		logger.Warningf("grpc: failed to get client hostname due to %v.\n", err)
 		return ""
 	}
 	var sc string

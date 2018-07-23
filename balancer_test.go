@@ -27,8 +27,8 @@ import (
 	"time"
 
 	"github.com/micro/grpc-go/codes"
-	_ "github.com/micro/grpc-go/grpclog/glogger"
 	"github.com/micro/grpc-go/internal/leakcheck"
+	_ "github.com/micro/grpc-go/logger/glogger"
 	"github.com/micro/grpc-go/naming"
 	"github.com/micro/grpc-go/status"
 	"golang.org/x/net/context"

@@ -32,9 +32,9 @@ import (
 
 	"github.com/micro/grpc-go"
 	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/interop"
 	testpb "github.com/micro/grpc-go/interop/grpc_testing"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/status"
 	"golang.org/x/net/context"
 )
@@ -76,10 +76,10 @@ func rstAfterHeader(tc testpb.TestServiceClient) {
 	req := largeSimpleRequest()
 	reply, err := tc.UnaryCall(context.Background(), req)
 	if reply != nil {
-		grpclog.Fatalf("Client received reply despite server sending rst stream after header")
+		logger.Fatalf("Client received reply despite server sending rst stream after header")
 	}
 	if status.Code(err) != codes.Internal {
-		grpclog.Fatalf("%v.UnaryCall() = _, %v, want _, %v", tc, status.Code(err), codes.Internal)
+		logger.Fatalf("%v.UnaryCall() = _, %v, want _, %v", tc, status.Code(err), codes.Internal)
 	}
 }
 
@@ -87,10 +87,10 @@ func rstDuringData(tc testpb.TestServiceClient) {
 	req := largeSimpleRequest()
 	reply, err := tc.UnaryCall(context.Background(), req)
 	if reply != nil {
-		grpclog.Fatalf("Client received reply despite server sending rst stream during data")
+		logger.Fatalf("Client received reply despite server sending rst stream during data")
 	}
 	if status.Code(err) != codes.Unknown {
-		grpclog.Fatalf("%v.UnaryCall() = _, %v, want _, %v", tc, status.Code(err), codes.Unknown)
+		logger.Fatalf("%v.UnaryCall() = _, %v, want _, %v", tc, status.Code(err), codes.Unknown)
 	}
 }
 
@@ -98,10 +98,10 @@ func rstAfterData(tc testpb.TestServiceClient) {
 	req := largeSimpleRequest()
 	reply, err := tc.UnaryCall(context.Background(), req)
 	if reply != nil {
-		grpclog.Fatalf("Client received reply despite server sending rst stream after data")
+		logger.Fatalf("Client received reply despite server sending rst stream after data")
 	}
 	if status.Code(err) != codes.Internal {
-		grpclog.Fatalf("%v.UnaryCall() = _, %v, want _, %v", tc, status.Code(err), codes.Internal)
+		logger.Fatalf("%v.UnaryCall() = _, %v, want _, %v", tc, status.Code(err), codes.Internal)
 	}
 }
 
@@ -130,30 +130,30 @@ func main() {
 	opts = append(opts, grpc.WithInsecure())
 	conn, err := grpc.Dial(serverAddr, opts...)
 	if err != nil {
-		grpclog.Fatalf("Fail to dial: %v", err)
+		logger.Fatalf("Fail to dial: %v", err)
 	}
 	defer conn.Close()
 	tc := testpb.NewTestServiceClient(conn)
 	switch *testCase {
 	case "goaway":
 		goaway(tc)
-		grpclog.Infoln("goaway done")
+		logger.Infoln("goaway done")
 	case "rst_after_header":
 		rstAfterHeader(tc)
-		grpclog.Infoln("rst_after_header done")
+		logger.Infoln("rst_after_header done")
 	case "rst_during_data":
 		rstDuringData(tc)
-		grpclog.Infoln("rst_during_data done")
+		logger.Infoln("rst_during_data done")
 	case "rst_after_data":
 		rstAfterData(tc)
-		grpclog.Infoln("rst_after_data done")
+		logger.Infoln("rst_after_data done")
 	case "ping":
 		ping(tc)
-		grpclog.Infoln("ping done")
+		logger.Infoln("ping done")
 	case "max_streams":
 		maxStreams(tc)
-		grpclog.Infoln("max_streams done")
+		logger.Infoln("max_streams done")
 	default:
-		grpclog.Fatal("Unsupported test case: ", *testCase)
+		logger.Fatal("Unsupported test case: ", *testCase)
 	}
 }

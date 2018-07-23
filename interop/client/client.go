@@ -28,9 +28,9 @@ import (
 	"github.com/micro/grpc-go/credentials"
 	"github.com/micro/grpc-go/credentials/alts"
 	"github.com/micro/grpc-go/credentials/oauth"
-	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/interop"
 	testpb "github.com/micro/grpc-go/interop/grpc_testing"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/resolver"
 	"github.com/micro/grpc-go/testdata"
 )
@@ -73,7 +73,7 @@ func main() {
 	flag.Parse()
 	resolver.SetDefaultScheme("dns")
 	if *useTLS && *useALTS {
-		grpclog.Fatalf("use_tls and use_alts cannot be both set to true")
+		logger.Fatalf("use_tls and use_alts cannot be both set to true")
 	}
 	serverAddr := net.JoinHostPort(*serverHost, strconv.Itoa(*serverPort))
 	var opts []grpc.DialOption
@@ -90,7 +90,7 @@ func main() {
 			}
 			creds, err = credentials.NewClientTLSFromFile(*caFile, sn)
 			if err != nil {
-				grpclog.Fatalf("Failed to create TLS credentials %v", err)
+				logger.Fatalf("Failed to create TLS credentials %v", err)
 			}
 		} else {
 			creds = credentials.NewClientTLSFromCert(nil, sn)
@@ -112,13 +112,13 @@ func main() {
 		} else if *testCase == "service_account_creds" {
 			jwtCreds, err := oauth.NewServiceAccountFromFile(*serviceAccountKeyFile, *oauthScope)
 			if err != nil {
-				grpclog.Fatalf("Failed to create JWT credentials: %v", err)
+				logger.Fatalf("Failed to create JWT credentials: %v", err)
 			}
 			opts = append(opts, grpc.WithPerRPCCredentials(jwtCreds))
 		} else if *testCase == "jwt_token_creds" {
 			jwtCreds, err := oauth.NewJWTAccessFromFile(*serviceAccountKeyFile)
 			if err != nil {
-				grpclog.Fatalf("Failed to create JWT credentials: %v", err)
+				logger.Fatalf("Failed to create JWT credentials: %v", err)
 			}
 			opts = append(opts, grpc.WithPerRPCCredentials(jwtCreds))
 		} else if *testCase == "oauth2_auth_token" {
@@ -128,81 +128,81 @@ func main() {
 	opts = append(opts, grpc.WithBlock())
 	conn, err := grpc.Dial(serverAddr, opts...)
 	if err != nil {
-		grpclog.Fatalf("Fail to dial: %v", err)
+		logger.Fatalf("Fail to dial: %v", err)
 	}
 	defer conn.Close()
 	tc := testpb.NewTestServiceClient(conn)
 	switch *testCase {
 	case "empty_unary":
 		interop.DoEmptyUnaryCall(tc)
-		grpclog.Infoln("EmptyUnaryCall done")
+		logger.Infoln("EmptyUnaryCall done")
 	case "large_unary":
 		interop.DoLargeUnaryCall(tc)
-		grpclog.Infoln("LargeUnaryCall done")
+		logger.Infoln("LargeUnaryCall done")
 	case "client_streaming":
 		interop.DoClientStreaming(tc)
-		grpclog.Infoln("ClientStreaming done")
+		logger.Infoln("ClientStreaming done")
 	case "server_streaming":
 		interop.DoServerStreaming(tc)
-		grpclog.Infoln("ServerStreaming done")
+		logger.Infoln("ServerStreaming done")
 	case "ping_pong":
 		interop.DoPingPong(tc)
-		grpclog.Infoln("Pingpong done")
+		logger.Infoln("Pingpong done")
 	case "empty_stream":
 		interop.DoEmptyStream(tc)
-		grpclog.Infoln("Emptystream done")
+		logger.Infoln("Emptystream done")
 	case "timeout_on_sleeping_server":
 		interop.DoTimeoutOnSleepingServer(tc)
-		grpclog.Infoln("TimeoutOnSleepingServer done")
+		logger.Infoln("TimeoutOnSleepingServer done")
 	case "compute_engine_creds":
 		if !*useTLS && !*useALTS {
-			grpclog.Fatalf("Neither TLS or ALTS are enabled. TLS or ALTS is required to execute compute_engine_creds test case.")
+			logger.Fatalf("Neither TLS or ALTS are enabled. TLS or ALTS is required to execute compute_engine_creds test case.")
 		}
 		interop.DoComputeEngineCreds(tc, *defaultServiceAccount, *oauthScope)
-		grpclog.Infoln("ComputeEngineCreds done")
+		logger.Infoln("ComputeEngineCreds done")
 	case "service_account_creds":
 		if !*useTLS && !*useALTS {
-			grpclog.Fatalf("Neither TLS or ALTS are enabled. TLS or ALTS is required to execute service_account_creds test case.")
+			logger.Fatalf("Neither TLS or ALTS are enabled. TLS or ALTS is required to execute service_account_creds test case.")
 		}
 		interop.DoServiceAccountCreds(tc, *serviceAccountKeyFile, *oauthScope)
-		grpclog.Infoln("ServiceAccountCreds done")
+		logger.Infoln("ServiceAccountCreds done")
 	case "jwt_token_creds":
 		if !*useTLS && !*useALTS {
-			grpclog.Fatalf("Neither TLS or ALTS are enabled. TLS or ALTS is required to execute jwt_token_creds test case.")
+			logger.Fatalf("Neither TLS or ALTS are enabled. TLS or ALTS is required to execute jwt_token_creds test case.")
 		}
 		interop.DoJWTTokenCreds(tc, *serviceAccountKeyFile)
-		grpclog.Infoln("JWTtokenCreds done")
+		logger.Infoln("JWTtokenCreds done")
 	case "per_rpc_creds":
 		if !*useTLS && !*useALTS {
-			grpclog.Fatalf("Neither TLS or ALTS are enabled. TLS or ALTS is required to execute per_rpc_creds test case.")
+			logger.Fatalf("Neither TLS or ALTS are enabled. TLS or ALTS is required to execute per_rpc_creds test case.")
 		}
 		interop.DoPerRPCCreds(tc, *serviceAccountKeyFile, *oauthScope)
-		grpclog.Infoln("PerRPCCreds done")
+		logger.Infoln("PerRPCCreds done")
 	case "oauth2_auth_token":
 		if !*useTLS && !*useALTS {
-			grpclog.Fatalf("Neither TLS or ALTS are enabled. TLS or ALTS is required to execute oauth2_auth_token test case.")
+			logger.Fatalf("Neither TLS or ALTS are enabled. TLS or ALTS is required to execute oauth2_auth_token test case.")
 		}
 		interop.DoOauth2TokenCreds(tc, *serviceAccountKeyFile, *oauthScope)
-		grpclog.Infoln("Oauth2TokenCreds done")
+		logger.Infoln("Oauth2TokenCreds done")
 	case "cancel_after_begin":
 		interop.DoCancelAfterBegin(tc)
-		grpclog.Infoln("CancelAfterBegin done")
+		logger.Infoln("CancelAfterBegin done")
 	case "cancel_after_first_response":
 		interop.DoCancelAfterFirstResponse(tc)
-		grpclog.Infoln("CancelAfterFirstResponse done")
+		logger.Infoln("CancelAfterFirstResponse done")
 	case "status_code_and_message":
 		interop.DoStatusCodeAndMessage(tc)
-		grpclog.Infoln("StatusCodeAndMessage done")
+		logger.Infoln("StatusCodeAndMessage done")
 	case "custom_metadata":
 		interop.DoCustomMetadata(tc)
-		grpclog.Infoln("CustomMetadata done")
+		logger.Infoln("CustomMetadata done")
 	case "unimplemented_method":
 		interop.DoUnimplementedMethod(conn)
-		grpclog.Infoln("UnimplementedMethod done")
+		logger.Infoln("UnimplementedMethod done")
 	case "unimplemented_service":
 		interop.DoUnimplementedService(testpb.NewUnimplementedServiceClient(conn))
-		grpclog.Infoln("UnimplementedService done")
+		logger.Infoln("UnimplementedService done")
 	default:
-		grpclog.Fatal("Unsupported test case: ", *testCase)
+		logger.Fatal("Unsupported test case: ", *testCase)
 	}
 }

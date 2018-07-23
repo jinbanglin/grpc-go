@@ -48,13 +48,13 @@ import (
 	"github.com/micro/grpc-go/connectivity"
 	"github.com/micro/grpc-go/credentials"
 	_ "github.com/micro/grpc-go/encoding/gzip"
-	_ "github.com/micro/grpc-go/grpclog/glogger"
 	"github.com/micro/grpc-go/health"
 	healthgrpc "github.com/micro/grpc-go/health/grpc_health_v1"
 	healthpb "github.com/micro/grpc-go/health/grpc_health_v1"
 	"github.com/micro/grpc-go/internal"
 	"github.com/micro/grpc-go/internal/leakcheck"
 	"github.com/micro/grpc-go/keepalive"
+	_ "github.com/micro/grpc-go/logger/glogger"
 	"github.com/micro/grpc-go/metadata"
 	"github.com/micro/grpc-go/peer"
 	"github.com/micro/grpc-go/resolver"
@@ -4785,12 +4785,12 @@ func logOutputHasContents(v []byte, wakeup chan<- bool) bool {
 	return false
 }
 
-var verboseLogs = flag.Bool("verbose_logs", false, "show all grpclog output, without filtering")
+var verboseLogs = flag.Bool("verbose_logs", false, "show all logger output, without filtering")
 
 func noop() {}
 
 // declareLogNoise declares that t is expected to emit the following noisy phrases,
-// even on success. Those phrases will be filtered from grpclog output
+// even on success. Those phrases will be filtered from logger output
 // and only be shown if *verbose_logs or t ends up failing.
 // The returned restore function should be called with defer to be run
 // before the test ends.

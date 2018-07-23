@@ -29,9 +29,9 @@ import (
 	"github.com/micro/grpc-go/balancer"
 	"github.com/micro/grpc-go/codes"
 	"github.com/micro/grpc-go/encoding"
-	"github.com/micro/grpc-go/grpclog"
 	"github.com/micro/grpc-go/internal/channelz"
 	"github.com/micro/grpc-go/internal/grpcrand"
+	"github.com/micro/grpc-go/logger"
 	"github.com/micro/grpc-go/metadata"
 	"github.com/micro/grpc-go/stats"
 	"github.com/micro/grpc-go/status"
@@ -438,13 +438,13 @@ func (cs *clientStream) shouldRetry(err error) error {
 		if len(sps) == 1 {
 			var e error
 			if pushback, e = strconv.Atoi(sps[0]); e != nil || pushback < 0 {
-				grpclog.Infof("Server retry pushback specified to abort (%q).", sps[0])
+				logger.Infof("Server retry pushback specified to abort (%q).", sps[0])
 				cs.retryThrottler.throttle() // This counts as a failure for throttling.
 				return err
 			}
 			hasPushback = true
 		} else if len(sps) > 1 {
-			grpclog.Warningf("Server retry pushback specified multiple values (%q); not retrying.", sps)
+			logger.Warningf("Server retry pushback specified multiple values (%q); not retrying.", sps)
 			cs.retryThrottler.throttle() // This counts as a failure for throttling.
 			return err
 		}
