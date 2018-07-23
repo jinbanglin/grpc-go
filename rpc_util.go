@@ -403,7 +403,7 @@ func (o ContentSubtypeCallOption) after(c *callInfo) {}
 //
 // This function is provided for advanced users; prefer to use only
 // CallContentSubtype to select a registered codec instead.
-func CallCustomCodec(codec Codec) CallOption {
+func CallCustomCodec(codec encoding.Codec) CallOption {
 	return CustomCodecCallOption{Codec: codec}
 }
 
@@ -411,7 +411,7 @@ func CallCustomCodec(codec Codec) CallOption {
 // marshaling messages.
 // This is an EXPERIMENTAL API.
 type CustomCodecCallOption struct {
-	Codec Codec
+	Codec encoding.Codec
 }
 
 func (o CustomCodecCallOption) before(c *callInfo) error {

@@ -56,7 +56,7 @@ func (testCodec) Unmarshal(data []byte, v interface{}) error {
 	return nil
 }
 
-func (testCodec) String() string {
+func (testCodec) Name() string {
 	return "test"
 }
 

@@ -25,6 +25,7 @@ import (
 
 	"github.com/micro/grpc-go/balancer"
 	"github.com/micro/grpc-go/credentials"
+	"github.com/micro/grpc-go/encoding"
 	"github.com/micro/grpc-go/internal"
 	"github.com/micro/grpc-go/internal/backoff"
 	"github.com/micro/grpc-go/internal/envconfig"
@@ -160,7 +161,7 @@ func WithDefaultCallOptions(cos ...CallOption) DialOption {
 // unmarshaling.
 //
 // Deprecated: use WithDefaultCallOptions(CallCustomCodec(c)) instead.
-func WithCodec(c Codec) DialOption {
+func WithCodec(c encoding.Codec) DialOption {
 	return WithDefaultCallOptions(CallCustomCodec(c))
 }
 

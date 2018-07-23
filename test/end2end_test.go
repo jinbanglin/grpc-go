@@ -47,6 +47,7 @@ import (
 	"github.com/micro/grpc-go/codes"
 	"github.com/micro/grpc-go/connectivity"
 	"github.com/micro/grpc-go/credentials"
+	"github.com/micro/grpc-go/encoding"
 	_ "github.com/micro/grpc-go/encoding/gzip"
 	"github.com/micro/grpc-go/health"
 	healthgrpc "github.com/micro/grpc-go/health/grpc_health_v1"
@@ -469,7 +470,7 @@ type test struct {
 	streamServerInt             grpc.StreamServerInterceptor
 	unknownHandler              grpc.StreamHandler
 	sc                          <-chan grpc.ServiceConfig
-	customCodec                 grpc.Codec
+	customCodec                 encoding.Codec
 	serverInitialWindowSize     int32
 	serverInitialConnWindowSize int32
 	clientInitialWindowSize     int32
@@ -5436,7 +5437,7 @@ func (c *errCodec) Unmarshal(data []byte, v interface{}) error {
 	return nil
 }
 
-func (c *errCodec) String() string {
+func (c *errCodec) Name() string {
 	return "Fermat's near-miss."
 }
 
