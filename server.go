@@ -49,7 +49,6 @@ import (
 	"github.com/micro/grpc-go/metadata"
 	"github.com/micro/grpc-go/stats"
 	"github.com/micro/grpc-go/status"
-	"github.com/micro/grpc-go/tap"
 	"github.com/micro/grpc-go/transport"
 )
 
@@ -121,7 +120,6 @@ type options struct {
 	dc                    Decompressor
 	unaryInt              UnaryServerInterceptor
 	streamInt             StreamServerInterceptor
-	inTapHandle           tap.ServerInHandle
 	statsHandler          stats.Handler
 	maxConcurrentStreams  uint32
 	maxReceiveMessageSize int
@@ -293,17 +291,6 @@ func StreamInterceptor(i StreamServerInterceptor) ServerOption {
 			panic("The stream server interceptor was already set and may not be reset.")
 		}
 		o.streamInt = i
-	}
-}
-
-// InTapHandle returns a ServerOption that sets the tap handle for all the server
-// transport to be created. Only one can be installed.
-func InTapHandle(h tap.ServerInHandle) ServerOption {
-	return func(o *options) {
-		if o.inTapHandle != nil {
-			panic("The tap handle was already set and may not be reset.")
-		}
-		o.inTapHandle = h
 	}
 }
 
@@ -665,7 +652,6 @@ func (s *Server) newHTTP2Transport(c net.Conn, authInfo credentials.AuthInfo) tr
 	config := &transport.ServerConfig{
 		MaxStreams:            s.opts.maxConcurrentStreams,
 		AuthInfo:              authInfo,
-		InTapHandle:           s.opts.inTapHandle,
 		StatsHandler:          s.opts.statsHandler,
 		KeepaliveParams:       s.opts.keepaliveParams,
 		KeepalivePolicy:       s.opts.keepalivePolicy,

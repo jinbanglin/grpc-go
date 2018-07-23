@@ -45,7 +45,6 @@ import (
 	"github.com/micro/grpc-go/peer"
 	"github.com/micro/grpc-go/stats"
 	"github.com/micro/grpc-go/status"
-	"github.com/micro/grpc-go/tap"
 )
 
 var (
@@ -70,7 +69,6 @@ type http2Server struct {
 	localAddr   net.Addr
 	maxStreamID uint32               // max stream ID ever seen
 	authInfo    credentials.AuthInfo // auth info about the connection
-	inTapHandle tap.ServerInHandle
 	framer      *framer
 	// The max number of concurrent streams.
 	maxStreams uint32
@@ -222,7 +220,6 @@ func newHTTP2Server(conn net.Conn, config *ServerConfig) (_ ServerTransport, err
 		readerDone:        make(chan struct{}),
 		writerDone:        make(chan struct{}),
 		maxStreams:        maxStreams,
-		inTapHandle:       config.InTapHandle,
 		fc:                &trInFlow{limit: uint32(icwz)},
 		state:             reachable,
 		activeStreams:     make(map[uint32]*Stream),
@@ -346,23 +343,6 @@ func (t *http2Server) operateHeaders(frame *http2.MetaHeadersFrame, handle func(
 	}
 	if state.statsTrace != nil {
 		s.ctx = stats.SetIncomingTrace(s.ctx, state.statsTrace)
-	}
-	if t.inTapHandle != nil {
-		var err error
-		info := &tap.Info{
-			FullMethodName: state.method,
-		}
-		s.ctx, err = t.inTapHandle(s.ctx, info)
-		if err != nil {
-			warningf("transport: http2Server.operateHeaders got an error from InTapHandle: %v", err)
-			t.controlBuf.put(&cleanupStream{
-				streamID: s.id,
-				rst:      true,
-				rstCode:  http2.ErrCodeRefusedStream,
-				onWrite:  func() {},
-			})
-			return
-		}
 	}
 	t.mu.Lock()
 	if t.state != reachable {

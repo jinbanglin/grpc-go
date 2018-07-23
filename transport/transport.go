@@ -35,7 +35,6 @@ import (
 	"github.com/micro/grpc-go/metadata"
 	"github.com/micro/grpc-go/stats"
 	"github.com/micro/grpc-go/status"
-	"github.com/micro/grpc-go/tap"
 	"golang.org/x/net/context"
 )
 
@@ -438,7 +437,6 @@ const (
 type ServerConfig struct {
 	MaxStreams            uint32
 	AuthInfo              credentials.AuthInfo
-	InTapHandle           tap.ServerInHandle
 	StatsHandler          stats.Handler
 	KeepaliveParams       keepalive.ServerParameters
 	KeepalivePolicy       keepalive.EnforcementPolicy
