@@ -949,10 +949,6 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 			switch st := err.(type) {
 			case transport.ConnectionError:
 				// Nothing to do here.
-			case transport.StreamError:
-				if e := t.WriteStatus(stream, status.New(st.Code, st.Desc)); e != nil {
-					logger.Warningf("grpc: Server.processUnaryRPC failed to write status %v", e)
-				}
 			default:
 				panic(fmt.Sprintf("grpc: Unexpected error (%T) from recvMsg: %v", st, st))
 			}
@@ -1048,10 +1044,6 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 			switch st := err.(type) {
 			case transport.ConnectionError:
 				// Nothing to do here.
-			case transport.StreamError:
-				if e := t.WriteStatus(stream, status.New(st.Code, st.Desc)); e != nil {
-					logger.Warningf("grpc: Server.processUnaryRPC failed to write status %v", e)
-				}
 			default:
 				panic(fmt.Sprintf("grpc: Unexpected error (%T) from sendResponse: %v", st, st))
 			}
@@ -1171,12 +1163,7 @@ func (s *Server) processStreamingRPC(t transport.ServerTransport, stream *transp
 	if appErr != nil {
 		appStatus, ok := status.FromError(appErr)
 		if !ok {
-			switch err := appErr.(type) {
-			case transport.StreamError:
-				appStatus = status.New(err.Code, err.Desc)
-			default:
-				appStatus = status.New(codes.Unknown, appErr.Error())
-			}
+			appStatus = status.New(codes.Unknown, appErr.Error())
 			appErr = appStatus.Err()
 		}
 		if trInfo != nil {
