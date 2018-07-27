@@ -2949,15 +2949,6 @@ func TestTransparentRetry(t *testing.T) {
 // with the REFUSED_STREAM error code, which the InTapHandle provokes.
 func testTransparentRetry(t *testing.T, e env) {
 	te := newTest(t, e)
-	attempts := 0
-	successAttempt := 2
-	te.tapHandle = func(ctx context.Context, _ *tap.Info) (context.Context, error) {
-		attempts++
-		if attempts < successAttempt {
-			return nil, errors.New("not now")
-		}
-		return ctx, nil
-	}
 	te.startServer(&testServer{security: e.security})
 	defer te.tearDown()
 
@@ -2983,9 +2974,6 @@ func testTransparentRetry(t *testing.T, e env) {
 		errCode:        codes.Unavailable, // We won't retry on fail fast.
 	}}
 	for _, tc := range testCases {
-		attempts = 0
-		successAttempt = tc.successAttempt
-
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		_, err := tsc.EmptyCall(ctx, &testpb.Empty{}, grpc.FailFast(tc.failFast))
 		cancel()
@@ -4895,42 +4883,6 @@ func TestStatsTagsAndTrace(t *testing.T) {
 	}
 }
 
-func TestTapTimeout(t *testing.T) {
-	sopts := []grpc.ServerOption{
-		grpc.InTapHandle(func(ctx context.Context, _ *tap.Info) (context.Context, error) {
-			c, cancel := context.WithCancel(ctx)
-			// Call cancel instead of setting a deadline so we can detect which error
-			// occurred -- this cancellation (desired) or the client's deadline
-			// expired (indicating this cancellation did not affect the RPC).
-			time.AfterFunc(10*time.Millisecond, cancel)
-			return c, nil
-		}),
-	}
-
-	ss := &stubServer{
-		emptyCall: func(ctx context.Context, in *testpb.Empty) (*testpb.Empty, error) {
-			<-ctx.Done()
-			return nil, status.Errorf(codes.Canceled, ctx.Err().Error())
-		},
-	}
-	if err := ss.Start(sopts); err != nil {
-		t.Fatalf("Error starting endpoint server: %v", err)
-	}
-	defer ss.Stop()
-
-	// This was known to be flaky; test several times.
-	for i := 0; i < 10; i++ {
-		// Set our own deadline in case the server hangs.
-		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
-		res, err := ss.client.EmptyCall(ctx, &testpb.Empty{})
-		cancel()
-		if s, ok := status.FromError(err); !ok || s.Code() != codes.Canceled {
-			t.Fatalf("ss.client.EmptyCall(context.Background(), _) = %v, %v; want nil, <status with Code()=Canceled>", res, err)
-		}
-	}
-
-}
-
 func TestClientWriteFailsAfterServerClosesStream(t *testing.T) {
 	ss := &stubServer{
 		fullDuplexCall: func(stream testpb.TestService_FullDuplexCallServer) error {
@@ -5064,7 +5016,7 @@ func (cr testPerRPCCredentials) RequireTransportSecurity() bool {
 	return false
 }
 
-func authHandle(ctx context.Context, info *tap.Info) (context.Context, error) {
+func authHandle(ctx context.Context) (context.Context, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return ctx, fmt.Errorf("didn't find metadata in context")
@@ -5090,7 +5042,6 @@ func TestPerRPCCredentialsViaDialOptions(t *testing.T) {
 
 func testPerRPCCredentialsViaDialOptions(t *testing.T, e env) {
 	te := newTest(t, e)
-	te.tapHandle = authHandle
 	te.perRPCCreds = testPerRPCCredentials{}
 	te.startServer(&testServer{security: e.security})
 	defer te.tearDown()
@@ -5111,7 +5062,6 @@ func TestPerRPCCredentialsViaCallOptions(t *testing.T) {
 
 func testPerRPCCredentialsViaCallOptions(t *testing.T, e env) {
 	te := newTest(t, e)
-	te.tapHandle = authHandle
 	te.startServer(&testServer{security: e.security})
 	defer te.tearDown()
 
@@ -5134,25 +5084,6 @@ func testPerRPCCredentialsViaDialOptionsAndCallOptions(t *testing.T, e env) {
 	te.perRPCCreds = testPerRPCCredentials{}
 	// When credentials are provided via both dial options and call options,
 	// we apply both sets.
-	te.tapHandle = func(ctx context.Context, _ *tap.Info) (context.Context, error) {
-		md, ok := metadata.FromIncomingContext(ctx)
-		if !ok {
-			return ctx, fmt.Errorf("couldn't find metadata in context")
-		}
-		for k, vwant := range authdata {
-			vgot, ok := md[k]
-			if !ok {
-				return ctx, fmt.Errorf("couldn't find metadata for key %v", k)
-			}
-			if len(vgot) != 2 {
-				return ctx, fmt.Errorf("len of value for key %v was %v, want 2", k, len(vgot))
-			}
-			if vgot[0] != vwant || vgot[1] != vwant {
-				return ctx, fmt.Errorf("value for %v was %v, want [%v, %v]", k, vgot, vwant, vwant)
-			}
-		}
-		return ctx, nil
-	}
 	te.startServer(&testServer{security: e.security})
 	defer te.tearDown()
 
