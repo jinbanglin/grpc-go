@@ -8,7 +8,7 @@ import fmt "fmt"
 import math "math"
 
 import (
-	grpc "github.com/micro/grpc-go"
+	grpc "github.com/jinbanglin/grpc-go"
 	context "golang.org/x/net/context"
 )
 
@@ -791,7 +791,7 @@ const _ = grpc.SupportPackageIsVersion4
 
 // ServerReflectionClient is the client API for ServerReflection service.
 //
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/github.com/micro/grpc-go#ClientConn.NewStream.
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/github.com/jinbanglin/grpc-go#ClientConn.NewStream.
 type ServerReflectionClient interface {
 	// The reflection service is structured as a bidirectional stream, ensuring
 	// all related requests go to a single server.

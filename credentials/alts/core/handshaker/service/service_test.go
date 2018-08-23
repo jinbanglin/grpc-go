@@ -21,7 +21,7 @@ package service
 import (
 	"testing"
 
-	grpc "github.com/micro/grpc-go"
+	grpc "github.com/jinbanglin/grpc-go"
 )
 
 const (

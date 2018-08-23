@@ -23,9 +23,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/micro/grpc-go/balancer"
-	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/resolver"
+	"github.com/jinbanglin/grpc-go/balancer"
+	"github.com/jinbanglin/grpc-go/connectivity"
+	"github.com/jinbanglin/grpc-go/resolver"
 )
 
 // The parent ClientConn should re-resolve when grpclb loses connection to the

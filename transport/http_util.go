@@ -32,8 +32,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/status"
+	"github.com/jinbanglin/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/status"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/hpack"
 	spb "google.golang.org/genproto/googleapis/rpc/status"

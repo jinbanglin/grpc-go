@@ -28,7 +28,7 @@ import (
 	"io/ioutil"
 	"sync"
 
-	"github.com/micro/grpc-go/encoding"
+	"github.com/jinbanglin/grpc-go/encoding"
 )
 
 // Name is the name registered for the gzip compressor.

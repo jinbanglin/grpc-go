@@ -32,9 +32,9 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	dpb "github.com/golang/protobuf/ptypes/duration"
-	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/metadata"
-	"github.com/micro/grpc-go/status"
+	"github.com/jinbanglin/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/metadata"
+	"github.com/jinbanglin/grpc-go/status"
 	"golang.org/x/net/context"
 	epb "google.golang.org/genproto/googleapis/rpc/errdetails"
 )

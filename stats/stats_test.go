@@ -30,11 +30,11 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/micro/grpc-go"
-	"github.com/micro/grpc-go/metadata"
-	"github.com/micro/grpc-go/stats"
-	testpb "github.com/micro/grpc-go/stats/grpc_testing"
-	"github.com/micro/grpc-go/status"
+	"github.com/jinbanglin/grpc-go"
+	"github.com/jinbanglin/grpc-go/metadata"
+	"github.com/jinbanglin/grpc-go/stats"
+	testpb "github.com/jinbanglin/grpc-go/stats/grpc_testing"
+	"github.com/jinbanglin/grpc-go/status"
 	"golang.org/x/net/context"
 )
 

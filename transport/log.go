@@ -21,7 +21,7 @@
 
 package transport
 
-import "github.com/micro/grpc-go/logger"
+import "github.com/jinbanglin/grpc-go/logger"
 
 const logLevel = 2
 

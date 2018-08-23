@@ -25,7 +25,7 @@ package backoff
 import (
 	"time"
 
-	"github.com/micro/grpc-go/internal/grpcrand"
+	"github.com/jinbanglin/grpc-go/internal/grpcrand"
 )
 
 // Strategy defines the methodology for backing off after a grpc connection

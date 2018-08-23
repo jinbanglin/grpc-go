@@ -25,7 +25,7 @@ package core
 import (
 	"net"
 
-	"github.com/micro/grpc-go/credentials"
+	"github.com/jinbanglin/grpc-go/credentials"
 	"golang.org/x/net/context"
 )
 

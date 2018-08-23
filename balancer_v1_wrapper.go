@@ -22,12 +22,12 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/micro/grpc-go/balancer"
-	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/logger"
-	"github.com/micro/grpc-go/resolver"
-	"github.com/micro/grpc-go/status"
+	"github.com/jinbanglin/grpc-go/balancer"
+	"github.com/jinbanglin/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/connectivity"
+	"github.com/jinbanglin/grpc-go/logger"
+	"github.com/jinbanglin/grpc-go/resolver"
+	"github.com/jinbanglin/grpc-go/status"
 	"golang.org/x/net/context"
 )
 

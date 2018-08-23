@@ -29,12 +29,12 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/micro/grpc-go"
-	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/internal/envconfig"
-	"github.com/micro/grpc-go/metadata"
-	"github.com/micro/grpc-go/status"
-	testpb "github.com/micro/grpc-go/test/grpc_testing"
+	"github.com/jinbanglin/grpc-go"
+	"github.com/jinbanglin/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/internal/envconfig"
+	"github.com/jinbanglin/grpc-go/metadata"
+	"github.com/jinbanglin/grpc-go/status"
+	testpb "github.com/jinbanglin/grpc-go/test/grpc_testing"
 	"golang.org/x/net/context"
 )
 

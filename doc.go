@@ -21,4 +21,4 @@ Package grpc implements an RPC system called gRPC.
 
 See grpc.io for more information about gRPC.
 */
-package grpc // import "github.com/micro/grpc-go"
+package grpc // import "github.com/jinbanglin/grpc-go"

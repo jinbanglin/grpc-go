@@ -25,8 +25,8 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/status"
+	"github.com/jinbanglin/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/status"
 
 	netctx "golang.org/x/net/context"
 )

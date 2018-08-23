@@ -28,7 +28,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/micro/grpc-go/logger"
+	"github.com/jinbanglin/grpc-go/logger"
 )
 
 var (

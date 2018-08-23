@@ -32,8 +32,8 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	durpb "github.com/golang/protobuf/ptypes/duration"
-	channelzpb "github.com/micro/grpc-go/channelz/grpc_channelz_v1"
-	"github.com/micro/grpc-go/internal/channelz"
+	channelzpb "github.com/jinbanglin/grpc-go/channelz/grpc_channelz_v1"
+	"github.com/jinbanglin/grpc-go/internal/channelz"
 	"golang.org/x/net/context"
 	"golang.org/x/sys/unix"
 )

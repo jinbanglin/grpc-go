@@ -21,7 +21,7 @@
 package service
 
 import (
-	channelzpb "github.com/micro/grpc-go/channelz/grpc_channelz_v1"
+	channelzpb "github.com/jinbanglin/grpc-go/channelz/grpc_channelz_v1"
 	"golang.org/x/sys/unix"
 )
 

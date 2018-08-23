@@ -18,7 +18,7 @@ See official [readme](https://github.com/grpc/grpc-go) for usage.
 ## Compatibility
 
 - gRPC-go continues to be compatible with official grpc applications
-- gRPC-go is not a replacement for [go-grpc](https://github.com/micro/go-grpc)
+- gRPC-go is not a replacement for [go-grpc](https://github.com/jinbanglin/go-grpc)
 
 ## License
 

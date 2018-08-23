@@ -28,12 +28,12 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	durpb "github.com/golang/protobuf/ptypes/duration"
 	wrpb "github.com/golang/protobuf/ptypes/wrappers"
-	"github.com/micro/grpc-go"
-	channelzgrpc "github.com/micro/grpc-go/channelz/grpc_channelz_v1"
-	channelzpb "github.com/micro/grpc-go/channelz/grpc_channelz_v1"
-	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/credentials"
-	"github.com/micro/grpc-go/internal/channelz"
+	"github.com/jinbanglin/grpc-go"
+	channelzgrpc "github.com/jinbanglin/grpc-go/channelz/grpc_channelz_v1"
+	channelzpb "github.com/jinbanglin/grpc-go/channelz/grpc_channelz_v1"
+	"github.com/jinbanglin/grpc-go/connectivity"
+	"github.com/jinbanglin/grpc-go/credentials"
+	"github.com/jinbanglin/grpc-go/internal/channelz"
 	"golang.org/x/net/context"
 )
 

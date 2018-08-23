@@ -31,7 +31,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/micro/grpc-go/peer"
+	"github.com/jinbanglin/grpc-go/peer"
 	"golang.org/x/net/context"
 )
 

@@ -23,11 +23,11 @@ import (
 	"net"
 	"sync"
 
-	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/credentials"
-	"github.com/micro/grpc-go/logger"
-	"github.com/micro/grpc-go/naming"
-	"github.com/micro/grpc-go/status"
+	"github.com/jinbanglin/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/credentials"
+	"github.com/jinbanglin/grpc-go/logger"
+	"github.com/jinbanglin/grpc-go/naming"
+	"github.com/jinbanglin/grpc-go/status"
 	"golang.org/x/net/context"
 )
 

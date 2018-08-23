@@ -26,7 +26,7 @@ import (
 	"math"
 	"net"
 
-	"github.com/micro/grpc-go/credentials/alts/core"
+	"github.com/jinbanglin/grpc-go/credentials/alts/core"
 )
 
 // ALTSRecordCrypto is the interface for gRPC ALTS record protocol.

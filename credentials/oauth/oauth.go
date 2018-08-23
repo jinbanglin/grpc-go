@@ -24,7 +24,7 @@ import (
 	"io/ioutil"
 	"sync"
 
-	"github.com/micro/grpc-go/credentials"
+	"github.com/jinbanglin/grpc-go/credentials"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"

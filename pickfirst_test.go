@@ -24,11 +24,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/internal/leakcheck"
-	"github.com/micro/grpc-go/resolver"
-	"github.com/micro/grpc-go/resolver/manual"
-	"github.com/micro/grpc-go/status"
+	"github.com/jinbanglin/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/internal/leakcheck"
+	"github.com/jinbanglin/grpc-go/resolver"
+	"github.com/jinbanglin/grpc-go/resolver/manual"
+	"github.com/jinbanglin/grpc-go/status"
 	"golang.org/x/net/context"
 )
 

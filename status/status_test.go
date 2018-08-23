@@ -28,7 +28,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	apb "github.com/golang/protobuf/ptypes/any"
 	dpb "github.com/golang/protobuf/ptypes/duration"
-	"github.com/micro/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/codes"
 	"golang.org/x/net/context"
 	cpb "google.golang.org/genproto/googleapis/rpc/code"
 	epb "google.golang.org/genproto/googleapis/rpc/errdetails"

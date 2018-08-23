@@ -24,13 +24,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/micro/grpc-go/balancer"
-	"github.com/micro/grpc-go/balancer/roundrobin"
-	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/internal/leakcheck"
-	_ "github.com/micro/grpc-go/logger/glogger"
-	"github.com/micro/grpc-go/resolver"
-	"github.com/micro/grpc-go/resolver/manual"
+	"github.com/jinbanglin/grpc-go/balancer"
+	"github.com/jinbanglin/grpc-go/balancer/roundrobin"
+	"github.com/jinbanglin/grpc-go/connectivity"
+	"github.com/jinbanglin/grpc-go/internal/leakcheck"
+	_ "github.com/jinbanglin/grpc-go/logger/glogger"
+	"github.com/jinbanglin/grpc-go/resolver"
+	"github.com/jinbanglin/grpc-go/resolver/manual"
 	"golang.org/x/net/context"
 )
 

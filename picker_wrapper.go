@@ -22,12 +22,12 @@ import (
 	"io"
 	"sync"
 
-	"github.com/micro/grpc-go/balancer"
-	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/internal/channelz"
-	"github.com/micro/grpc-go/logger"
-	"github.com/micro/grpc-go/status"
-	"github.com/micro/grpc-go/transport"
+	"github.com/jinbanglin/grpc-go/balancer"
+	"github.com/jinbanglin/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/internal/channelz"
+	"github.com/jinbanglin/grpc-go/logger"
+	"github.com/jinbanglin/grpc-go/status"
+	"github.com/jinbanglin/grpc-go/transport"
 	"golang.org/x/net/context"
 )
 

@@ -22,7 +22,7 @@
 package connectivity
 
 import (
-	"github.com/micro/grpc-go/logger"
+	"github.com/jinbanglin/grpc-go/logger"
 	"golang.org/x/net/context"
 )
 

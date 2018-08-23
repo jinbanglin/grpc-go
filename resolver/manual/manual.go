@@ -24,7 +24,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/micro/grpc-go/resolver"
+	"github.com/jinbanglin/grpc-go/resolver"
 )
 
 // NewBuilderWithScheme creates a new test resolver builder with the given scheme.

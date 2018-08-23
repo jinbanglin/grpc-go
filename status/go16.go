@@ -21,7 +21,7 @@
 package status
 
 import (
-	"github.com/micro/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/codes"
 	"golang.org/x/net/context"
 )
 

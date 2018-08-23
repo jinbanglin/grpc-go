@@ -29,7 +29,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/micro/grpc-go/internal/leakcheck"
+	"github.com/jinbanglin/grpc-go/internal/leakcheck"
 	"golang.org/x/net/context"
 )
 

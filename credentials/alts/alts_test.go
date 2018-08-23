@@ -23,7 +23,7 @@ import (
 	"testing"
 
 	"github.com/golang/protobuf/proto"
-	altspb "github.com/micro/grpc-go/credentials/alts/core/proto/grpc_gcp"
+	altspb "github.com/jinbanglin/grpc-go/credentials/alts/core/proto/grpc_gcp"
 )
 
 func TestInfoServerName(t *testing.T) {

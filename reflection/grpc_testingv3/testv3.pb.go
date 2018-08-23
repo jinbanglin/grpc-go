@@ -19,7 +19,7 @@ import fmt "fmt"
 import math "math"
 
 import (
-	grpc "github.com/micro/grpc-go"
+	grpc "github.com/jinbanglin/grpc-go"
 	context "golang.org/x/net/context"
 )
 

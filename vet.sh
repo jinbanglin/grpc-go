@@ -17,7 +17,7 @@ PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
 
 if [ "$1" = "-install" ]; then
   go get -d \
-    github.com/micro/grpc-go/...
+    github.com/jinbanglin/grpc-go/...
   go get -u \
     github.com/golang/lint/golint \
     golang.org/x/tools/cmd/goimports \
@@ -78,12 +78,12 @@ fi
 
 # TODO(menghanl): fix errors in transport_test.
 staticcheck -ignore '
-github.com/micro/grpc-go/transport/transport_test.go:SA2002
-github.com/micro/grpc-go/benchmark/benchmain/main.go:SA1019
-github.com/micro/grpc-go/stats/stats_test.go:SA1019
-github.com/micro/grpc-go/test/end2end_test.go:SA1019
-github.com/micro/grpc-go/balancer_test.go:SA1019
-github.com/micro/grpc-go/balancer.go:SA1019
-github.com/micro/grpc-go/clientconn_test.go:SA1019
+github.com/jinbanglin/grpc-go/transport/transport_test.go:SA2002
+github.com/jinbanglin/grpc-go/benchmark/benchmain/main.go:SA1019
+github.com/jinbanglin/grpc-go/stats/stats_test.go:SA1019
+github.com/jinbanglin/grpc-go/test/end2end_test.go:SA1019
+github.com/jinbanglin/grpc-go/balancer_test.go:SA1019
+github.com/jinbanglin/grpc-go/balancer.go:SA1019
+github.com/jinbanglin/grpc-go/clientconn_test.go:SA1019
 ' ./...
 misspell -error .

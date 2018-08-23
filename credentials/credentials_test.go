@@ -23,7 +23,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/micro/grpc-go/testdata"
+	"github.com/jinbanglin/grpc-go/testdata"
 	"golang.org/x/net/context"
 )
 

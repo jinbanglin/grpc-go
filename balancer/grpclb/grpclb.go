@@ -21,7 +21,7 @@
 // Package grpclb defines a grpclb balancer.
 //
 // To install grpclb balancer, import this package as:
-//    import _ "github.com/micro/grpc-go/balancer/grpclb"
+//    import _ "github.com/jinbanglin/grpc-go/balancer/grpclb"
 package grpclb
 
 import (
@@ -32,13 +32,13 @@ import (
 	"time"
 
 	durationpb "github.com/golang/protobuf/ptypes/duration"
-	"github.com/micro/grpc-go"
-	"github.com/micro/grpc-go/balancer"
-	lbpb "github.com/micro/grpc-go/balancer/grpclb/grpc_lb_v1"
-	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/internal/backoff"
-	"github.com/micro/grpc-go/logger"
-	"github.com/micro/grpc-go/resolver"
+	"github.com/jinbanglin/grpc-go"
+	"github.com/jinbanglin/grpc-go/balancer"
+	lbpb "github.com/jinbanglin/grpc-go/balancer/grpclb/grpc_lb_v1"
+	"github.com/jinbanglin/grpc-go/connectivity"
+	"github.com/jinbanglin/grpc-go/internal/backoff"
+	"github.com/jinbanglin/grpc-go/logger"
+	"github.com/jinbanglin/grpc-go/resolver"
 	"golang.org/x/net/context"
 )
 

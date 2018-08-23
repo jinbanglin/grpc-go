@@ -21,7 +21,7 @@ package conn
 import (
 	"errors"
 
-	"github.com/micro/grpc-go/credentials/alts/core"
+	"github.com/jinbanglin/grpc-go/credentials/alts/core"
 )
 
 const counterLen = 12

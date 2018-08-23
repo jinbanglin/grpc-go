@@ -29,20 +29,20 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/micro/grpc-go/balancer"
-	_ "github.com/micro/grpc-go/balancer/roundrobin" // To register roundrobin.
-	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/credentials"
-	"github.com/micro/grpc-go/internal/backoff"
-	"github.com/micro/grpc-go/internal/channelz"
-	"github.com/micro/grpc-go/keepalive"
-	"github.com/micro/grpc-go/logger"
-	"github.com/micro/grpc-go/resolver"
-	_ "github.com/micro/grpc-go/resolver/dns"         // To register dns resolver.
-	_ "github.com/micro/grpc-go/resolver/passthrough" // To register passthrough resolver.
-	"github.com/micro/grpc-go/status"
-	"github.com/micro/grpc-go/transport"
+	"github.com/jinbanglin/grpc-go/balancer"
+	_ "github.com/jinbanglin/grpc-go/balancer/roundrobin" // To register roundrobin.
+	"github.com/jinbanglin/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/connectivity"
+	"github.com/jinbanglin/grpc-go/credentials"
+	"github.com/jinbanglin/grpc-go/internal/backoff"
+	"github.com/jinbanglin/grpc-go/internal/channelz"
+	"github.com/jinbanglin/grpc-go/keepalive"
+	"github.com/jinbanglin/grpc-go/logger"
+	"github.com/jinbanglin/grpc-go/resolver"
+	_ "github.com/jinbanglin/grpc-go/resolver/dns"         // To register dns resolver.
+	_ "github.com/jinbanglin/grpc-go/resolver/passthrough" // To register passthrough resolver.
+	"github.com/jinbanglin/grpc-go/status"
+	"github.com/jinbanglin/grpc-go/transport"
 	"golang.org/x/net/context"
 	"golang.org/x/net/trace"
 )

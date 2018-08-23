@@ -23,7 +23,7 @@ package service
 import (
 	"sync"
 
-	grpc "github.com/micro/grpc-go"
+	grpc "github.com/jinbanglin/grpc-go"
 )
 
 var (

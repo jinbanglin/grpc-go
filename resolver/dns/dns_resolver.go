@@ -31,10 +31,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/micro/grpc-go/internal/backoff"
-	"github.com/micro/grpc-go/internal/grpcrand"
-	"github.com/micro/grpc-go/logger"
-	"github.com/micro/grpc-go/resolver"
+	"github.com/jinbanglin/grpc-go/internal/backoff"
+	"github.com/jinbanglin/grpc-go/internal/grpcrand"
+	"github.com/jinbanglin/grpc-go/logger"
+	"github.com/jinbanglin/grpc-go/resolver"
 	"golang.org/x/net/context"
 )
 

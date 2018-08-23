@@ -23,7 +23,7 @@ package status
 import (
 	"context"
 
-	"github.com/micro/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/codes"
 	netctx "golang.org/x/net/context"
 )
 

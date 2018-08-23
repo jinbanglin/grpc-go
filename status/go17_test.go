@@ -24,7 +24,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/micro/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/codes"
 )
 
 func TestFromStdContextError(t *testing.T) {

@@ -20,7 +20,7 @@
 
 package syscall
 
-import "github.com/micro/grpc-go/logger"
+import "github.com/jinbanglin/grpc-go/logger"
 
 func init() {
 	logger.Info("CPU time info is unavailable on non-linux or appengine environment.")

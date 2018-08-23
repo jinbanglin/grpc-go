@@ -24,7 +24,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/micro/grpc-go/resolver"
+	"github.com/jinbanglin/grpc-go/resolver"
 )
 
 func TestParseTarget(t *testing.T) {

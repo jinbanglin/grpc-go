@@ -24,10 +24,10 @@ package roundrobin
 import (
 	"sync"
 
-	"github.com/micro/grpc-go/balancer"
-	"github.com/micro/grpc-go/balancer/base"
-	"github.com/micro/grpc-go/logger"
-	"github.com/micro/grpc-go/resolver"
+	"github.com/jinbanglin/grpc-go/balancer"
+	"github.com/jinbanglin/grpc-go/balancer/base"
+	"github.com/jinbanglin/grpc-go/logger"
+	"github.com/jinbanglin/grpc-go/resolver"
 	"golang.org/x/net/context"
 )
 

@@ -23,8 +23,8 @@ import (
 	"strings"
 	"testing"
 
-	altspb "github.com/micro/grpc-go/credentials/alts/core/proto/grpc_gcp"
-	"github.com/micro/grpc-go/peer"
+	altspb "github.com/jinbanglin/grpc-go/credentials/alts/core/proto/grpc_gcp"
+	"github.com/jinbanglin/grpc-go/peer"
 	"golang.org/x/net/context"
 )
 

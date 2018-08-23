@@ -22,10 +22,10 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/micro/grpc-go/balancer"
-	lbpb "github.com/micro/grpc-go/balancer/grpclb/grpc_lb_v1"
-	"github.com/micro/grpc-go/codes"
-	"github.com/micro/grpc-go/status"
+	"github.com/jinbanglin/grpc-go/balancer"
+	lbpb "github.com/jinbanglin/grpc-go/balancer/grpclb/grpc_lb_v1"
+	"github.com/jinbanglin/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/status"
 	"golang.org/x/net/context"
 )
 

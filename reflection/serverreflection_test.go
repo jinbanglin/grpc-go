@@ -32,10 +32,10 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	dpb "github.com/golang/protobuf/protoc-gen-go/descriptor"
-	"github.com/micro/grpc-go"
-	rpb "github.com/micro/grpc-go/reflection/grpc_reflection_v1alpha"
-	pb "github.com/micro/grpc-go/reflection/grpc_testing"
-	pbv3 "github.com/micro/grpc-go/reflection/grpc_testingv3"
+	"github.com/jinbanglin/grpc-go"
+	rpb "github.com/jinbanglin/grpc-go/reflection/grpc_reflection_v1alpha"
+	pb "github.com/jinbanglin/grpc-go/reflection/grpc_testing"
+	pbv3 "github.com/jinbanglin/grpc-go/reflection/grpc_testingv3"
 	"golang.org/x/net/context"
 )
 

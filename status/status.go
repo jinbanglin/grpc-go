@@ -33,7 +33,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/micro/grpc-go/codes"
+	"github.com/jinbanglin/grpc-go/codes"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
 )
 

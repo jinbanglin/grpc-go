@@ -25,9 +25,9 @@ import (
 	"net"
 	"strings"
 
-	"github.com/micro/grpc-go/connectivity"
-	"github.com/micro/grpc-go/credentials"
-	"github.com/micro/grpc-go/resolver"
+	"github.com/jinbanglin/grpc-go/connectivity"
+	"github.com/jinbanglin/grpc-go/credentials"
+	"github.com/jinbanglin/grpc-go/resolver"
 	"golang.org/x/net/context"
 )
 
